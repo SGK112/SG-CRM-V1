@@ -32,7 +32,13 @@ const AppLayout = ({ children }) => {
       <Sidebar />
       <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         <Navbar />
-        <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
+        <Box component="main" sx={{ 
+          flexGrow: 1, 
+          p: { xs: 2, sm: 3, md: 4 }, 
+          mt: 8,
+          maxWidth: '100%',
+          overflow: 'hidden'
+        }}>
           {children}
         </Box>
       </Box>

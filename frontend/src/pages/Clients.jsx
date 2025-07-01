@@ -256,9 +256,16 @@ const Clients = () => {
   }
 
   return (
-    <Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-        <Typography variant="h4">
+    <Box sx={{ maxWidth: '1400px', mx: 'auto', width: '100%' }}>
+      <Box sx={{ 
+        display: 'flex', 
+        justifyContent: 'space-between', 
+        alignItems: 'center', 
+        mb: { xs: 3, sm: 4 },
+        flexDirection: { xs: 'column', sm: 'row' },
+        gap: { xs: 2, sm: 0 }
+      }}>
+        <Typography variant="h4" sx={{ fontWeight: 600 }}>
           Clients
         </Typography>
         <Button
@@ -270,7 +277,7 @@ const Clients = () => {
         </Button>
       </Box>
 
-      <Paper sx={{ p: 3, mb: 3 }}>
+      <Paper sx={{ p: { xs: 2, sm: 3 }, mb: { xs: 2, sm: 3 } }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} md={6}>
             <TextField
@@ -303,9 +310,9 @@ const Clients = () => {
         </Grid>
       </Paper>
 
-      <Grid container spacing={3}>
+      <Grid container spacing={{ xs: 2, sm: 3 }}>
         {clients.map((client) => (
-          <Grid item xs={12} sm={6} md={4} key={client.id}>
+          <Grid item xs={12} sm={6} md={4} lg={3} key={client.id}>
             <ClientCard
               client={client}
               onEdit={handleEditClient}
