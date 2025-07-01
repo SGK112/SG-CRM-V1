@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter } from 'react-router-dom';
+import { HashRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -65,7 +65,7 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <BrowserRouter>
+        <HashRouter>
           <App />
           <Toaster 
             position="top-right"
@@ -77,7 +77,7 @@ root.render(
               },
             }}
           />
-        </BrowserRouter>
+        </HashRouter>
       </ThemeProvider>
     </QueryClientProvider>
   </React.StrictMode>

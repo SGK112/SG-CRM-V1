@@ -1,1 +1,14 @@
+# Fallback for Single Page Applications
 /*    /index.html   200
+
+# Specific routes
+/login    /index.html   200
+/dashboard    /index.html   200
+/clients    /index.html   200
+/contractors    /index.html   200
+/calendar    /index.html   200
+/services    /index.html   200
+/vendors    /index.html   200
+/estimates    /index.html   200
+/contracts    /index.html   200
+/payments    /index.html   200
