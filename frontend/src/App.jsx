@@ -1,7 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Box } from '@mui/material';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Navbar from './components/Layout/Navbar';
 import Sidebar from './components/Layout/Sidebar';
@@ -15,16 +14,6 @@ import Vendors from './pages/Vendors';
 import Estimates from './pages/Estimates';
 import Contracts from './pages/Contracts';
 import Payments from './pages/Payments';
-
-// Create a QueryClient instance
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -53,10 +42,9 @@ const AppLayout = ({ children }) => {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <AppLayout>
-          <Routes>
+    <AuthProvider>
+      <AppLayout>
+        <Routes>
             <Route path="/login" element={<Login />} />
             <Route 
               path="/dashboard" 
@@ -130,11 +118,9 @@ function App() {
                 </ProtectedRoute>
               } 
             />
-            <Route path="/" element={<Navigate to="/dashboard" />} />
-          </Routes>
-        </AppLayout>
-      </AuthProvider>
-    </QueryClientProvider>
+            <Route path="/" element={<Navigate to="/dashboard" />} />        </Routes>
+      </AppLayout>
+    </AuthProvider>
   );
 }
 
