@@ -102,7 +102,7 @@ const QuickActionCard = ({ title, description, action, color = 'primary' }) => (
 );
 
 const Dashboard = () => {
-  const { data: dashboardData, isLoading } = useQuery(
+  const { data: dashboardData, isLoading, error } = useQuery(
     'dashboard',
     async () => {
       try {
@@ -119,6 +119,7 @@ const Dashboard = () => {
           contracts: contracts.data,
         };
       } catch (error) {
+        console.warn('Dashboard API error:', error);
         // Return mock data if API fails
         return {
           vendors: [],
@@ -129,6 +130,8 @@ const Dashboard = () => {
     },
     {
       staleTime: 5 * 60 * 1000, // 5 minutes
+      retry: 1,
+      enabled: true, // Only fetch when needed
     }
   );
 
