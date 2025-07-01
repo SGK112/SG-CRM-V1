@@ -131,18 +131,17 @@ const Dashboard = () => {
     {
       staleTime: 5 * 60 * 1000, // 5 minutes
       retry: 1,
-      enabled: true, // Only fetch when needed
+      enabled: true,
+      // Provide initial data so component always renders
+      initialData: {
+        vendors: [],
+        estimates: [],
+        contracts: [],
+      },
     }
   );
 
-  if (isLoading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-        <Typography>Loading dashboard...</Typography>
-      </Box>
-    );
-  }
-
+  // Always show content, don't block on loading
   const stats = {
     totalVendors: dashboardData?.vendors?.length || 24,
     totalEstimates: dashboardData?.estimates?.length || 47,
@@ -155,6 +154,19 @@ const Dashboard = () => {
 
   return (
     <Box>
+      {/* API Status Banner */}
+      {error && (
+        <Box sx={{ mb: 2 }}>
+          <Card sx={{ bgcolor: '#fff3e0', border: '1px solid #ffb74d' }}>
+            <CardContent sx={{ py: 1.5 }}>
+              <Typography variant="body2" color="#f57c00">
+                ⚠️ Backend API is currently unavailable. Showing demo data.
+              </Typography>
+            </CardContent>
+          </Card>
+        </Box>
+      )}
+
       {/* Welcome Header */}
       <Box sx={{ mb: 4 }}>
         <Typography 
