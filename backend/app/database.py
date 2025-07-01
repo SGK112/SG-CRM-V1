@@ -16,12 +16,14 @@ async def get_database() -> AsyncIOMotorClient:
 async def connect_to_mongo():
     """Create database connection"""
     try:
-        db.client = AsyncIOMotorClient(config("MONGODB_URL"))
+        # Try DATABASE_URL first (MongoDB Atlas), fallback to MONGODB_URL (local)
+        mongo_url = config("DATABASE_URL", default=config("MONGODB_URL", default="mongodb://localhost:27017"))
+        db.client = AsyncIOMotorClient(mongo_url)
         db.database = db.client[config("DATABASE_NAME")]
         
         # Test the connection
         await db.client.admin.command('ping')
-        logger.info("Successfully connected to MongoDB")
+        logger.info(f"Successfully connected to MongoDB at {mongo_url}")
     except Exception as e:
         logger.error(f"Error connecting to MongoDB: {e}")
         raise
