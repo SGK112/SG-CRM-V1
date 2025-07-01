@@ -7,7 +7,7 @@ import os
 from pathlib import Path
 
 from app.database import connect_to_mongo, close_mongo_connection
-from app.api import auth, vendors, estimates, contracts, payments, pdf_upload
+from app.api import auth, vendors, estimates, contracts, payments, pdf_upload, clients, contractors, appointments, services
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -38,7 +38,9 @@ app.add_middleware(
         "http://127.0.0.1:3000",
         "https://sg-crm-frontend.onrender.com",
         "https://*.onrender.com",
-        "https://*.render.com"
+        "https://*.render.com",
+        "https://*.app.github.dev",
+        "https://super-space-bassoon-v6vwqw9vvw55269r5-3000.app.github.dev"
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -52,6 +54,10 @@ if static_dir.exists():
 
 # Include routers
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
+app.include_router(clients.router, prefix="/api/clients", tags=["Clients"])
+app.include_router(contractors.router, prefix="/api/contractors", tags=["Contractors"])
+app.include_router(appointments.router, prefix="/api/appointments", tags=["Appointments"])
+app.include_router(services.router, prefix="/api/services", tags=["Services"])
 app.include_router(vendors.router, prefix="/api/vendors", tags=["Vendors"])
 app.include_router(estimates.router, prefix="/api/estimates", tags=["Estimates"])
 app.include_router(contracts.router, prefix="/api/contracts", tags=["Contracts"])
