@@ -21,6 +21,7 @@ import {
   Build as ContractorsIcon,
   Event as CalendarIcon,
   HomeRepairService as ServicesIcon,
+  Settings as SettingsIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 
