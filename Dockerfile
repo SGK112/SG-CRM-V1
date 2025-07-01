@@ -8,14 +8,15 @@ COPY requirements.txt .
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy backend code
+# Copy backend code and main.py
 COPY backend/ ./backend/
+COPY main.py .
 
-# Change to backend directory
-WORKDIR /app/backend
+# Set Python path to include backend
+ENV PYTHONPATH=/app/backend
 
 # Expose port
 EXPOSE 8000
 
-# Start command
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Start command using the root main.py
+CMD ["python", "main.py"]
