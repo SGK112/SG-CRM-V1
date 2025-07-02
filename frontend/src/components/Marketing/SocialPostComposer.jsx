@@ -28,15 +28,15 @@ import {
   Add,
   Schedule,
   CameraAlt,
-  GifBox,
+  Gif as GifBox,
   Poll,
   LocationOn,
-  Mood,
-  Tag,
+  EmojiEmotions as Mood,
+  LocalOffer as Tag,
   AttachFile,
   Send,
-  SaveDraft,
-  Preview,
+  SaveAlt as SaveDraft,
+  Visibility as Preview,
 } from '@mui/icons-material';
 
 const SocialPostComposer = ({ onPost, onSchedule, onSaveDraft, platforms = [] }) => {
