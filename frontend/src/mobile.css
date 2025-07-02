@@ -1,0 +1,155 @@
+/* Mobile-specific styles for native app feel */
+
+/* Prevent text selection on interactive elements */
+.MuiCard-root, .MuiButton-root, .MuiBottomNavigationAction-root {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* Remove tap highlight on touch devices */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Better touch targets */
+.MuiIconButton-root {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.MuiBottomNavigationAction-root {
+  min-width: 64px;
+  padding: 8px 12px;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Safe area adjustments */
+@supports (padding: env(safe-area-inset-top)) {
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .safe-area-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .safe-area-right {
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Prevent body scroll when modal is open */
+.modal-open {
+  overflow: hidden;
+}
+
+/* Loading spinner improvements */
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.loading-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Mobile-friendly focus states */
+@media (hover: none) and (pointer: coarse) {
+  .MuiButton-root:hover {
+    background-color: inherit;
+  }
+  
+  .MuiIconButton-root:hover {
+    background-color: inherit;
+  }
+  
+  .MuiCard-root:hover {
+    transform: none;
+    box-shadow: inherit;
+  }
+}
+
+/* Improve touch feedback */
+.MuiCard-root:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+.MuiButton-root:active {
+  transform: scale(0.96);
+  transition: transform 0.1s ease;
+}
+
+/* Better text readability */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Fix input zoom on iOS */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="search"],
+  textarea {
+    font-size: 16px;
+  }
+}
+
+/* Custom Material-UI overrides for mobile */
+.MuiDialog-root .MuiDialog-paper {
+  margin: 16px;
+  max-height: calc(100% - 32px);
+}
+
+@media (max-width: 599px) {
+  .MuiDialog-root .MuiDialog-paper {
+    margin: 8px;
+    max-height: calc(100% - 16px);
+    border-radius: 12px;
+  }
+}
+
+/* Floating Action Button positioning */
+.fab-mobile {
+  position: fixed;
+  bottom: 80px; /* Above bottom navigation */
+  right: 16px;
+  z-index: 1200;
+}
+
+@media (min-width: 768px) {
+  .fab-mobile {
+    bottom: 16px;
+  }
+}

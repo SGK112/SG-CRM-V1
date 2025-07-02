@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Drawer,
   List,
@@ -10,6 +10,11 @@ import {
   Box,
   Typography,
   Avatar,
+  BottomNavigation,
+  BottomNavigationAction,
+  useTheme,
+  useMediaQuery,
+  Paper,
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
@@ -22,6 +27,7 @@ import {
   Event as CalendarIcon,
   HomeRepairService as ServicesIcon,
   Settings as SettingsIcon,
+  MoreHoriz as MoreIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -41,9 +47,84 @@ const menuItems = [
   { text: 'Admin Settings', icon: <SettingsIcon />, path: '/admin/settings' },
 ];
 
+// Mobile navigation items (most important for mobile)
+const mobileNavItems = [
+  { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
+  { text: 'Clients', icon: <ClientsIcon />, path: '/clients' },
+  { text: 'Calendar', icon: <CalendarIcon />, path: '/calendar' },
+  { text: 'Estimates', icon: <EstimatesIcon />, path: '/estimates' },
+  { text: 'More', icon: <MoreIcon />, path: '/more' },
+];
+
 const Sidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  
+  const getCurrentMobileValue = () => {
+    const currentPath = location.pathname;
+    const navItem = mobileNavItems.find(item => item.path === currentPath);
+    return navItem ? navItem.path : '/dashboard';
+  };
+
+  if (isMobile) {
+    return (
+      <Paper 
+        sx={{ 
+          position: 'fixed', 
+          bottom: 0, 
+          left: 0, 
+          right: 0, 
+          zIndex: 1300,
+          borderTop: '1px solid',
+          borderColor: 'divider',
+          // Safe area padding for devices with home indicator
+          paddingBottom: 'env(safe-area-inset-bottom)',
+        }} 
+        elevation={8}
+      >
+        <BottomNavigation
+          value={getCurrentMobileValue()}
+          onChange={(event, newValue) => {
+            if (newValue === '/more') {
+              // TODO: Show more menu or navigate to a more page
+              navigate('/dashboard');
+            } else {
+              navigate(newValue);
+            }
+          }}
+          showLabels
+          sx={{
+            height: 70,
+            '& .MuiBottomNavigationAction-root': {
+              minWidth: 'auto',
+              paddingTop: 1,
+              '&.Mui-selected': {
+                color: theme.palette.primary.main,
+              },
+            },
+            '& .MuiBottomNavigationAction-label': {
+              fontSize: '0.75rem',
+              fontWeight: 500,
+              '&.Mui-selected': {
+                fontSize: '0.75rem',
+              },
+            },
+          }}
+        >
+          {mobileNavItems.map((item) => (
+            <BottomNavigationAction
+              key={item.path}
+              label={item.text}
+              value={item.path}
+              icon={item.icon}
+            />
+          ))}
+        </BottomNavigation>
+      </Paper>
+    );
+  }
 
   return (
     <Drawer
@@ -51,6 +132,7 @@ const Sidebar = () => {
       sx={{
         width: drawerWidth,
         flexShrink: 0,
+        display: { xs: 'none', md: 'block' },
         [`& .MuiDrawer-paper`]: {
           width: drawerWidth,
           boxSizing: 'border-box',

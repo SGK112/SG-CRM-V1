@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Box } from '@mui/material';
+import { Box, useTheme, useMediaQuery } from '@mui/material';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Navbar from './components/Layout/Navbar';
 import Sidebar from './components/Layout/Sidebar';
@@ -22,22 +22,42 @@ const ProtectedRoute = ({ children }) => {
 
 const AppLayout = ({ children }) => {
   const { isAuthenticated } = useAuth();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   if (!isAuthenticated) {
-    return children;
+    return (
+      <Box sx={{ 
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        {children}
+      </Box>
+    );
   }
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
       <Sidebar />
       <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         <Navbar />
         <Box component="main" sx={{ 
           flexGrow: 1, 
-          p: { xs: 2, sm: 3, md: 4 }, 
-          mt: 8,
+          p: { xs: 1, sm: 2, md: 3 }, 
+          mt: { xs: 7, sm: 8 },
+          mb: { xs: 10, md: 0 }, // Add bottom margin for mobile navigation
           maxWidth: '100%',
-          overflow: 'hidden'
+          overflow: 'auto',
+          backgroundColor: '#f8fafc',
+          minHeight: `calc(100vh - ${isMobile ? 150 : 64}px)`, // Account for mobile bottom nav
+          // Safe area padding for mobile devices
+          paddingTop: { xs: 'calc(1rem + env(safe-area-inset-top))', sm: '1rem' },
+          paddingBottom: { xs: 'calc(1rem + env(safe-area-inset-bottom))', sm: '1rem' },
+          paddingLeft: { xs: 'calc(1rem + env(safe-area-inset-left))', sm: '1rem' },
+          paddingRight: { xs: 'calc(1rem + env(safe-area-inset-right))', sm: '1rem' }
         }}>
           {children}
         </Box>

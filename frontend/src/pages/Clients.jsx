@@ -41,11 +41,16 @@ const ClientCard = ({ client, onEdit, onView, onDelete, onSchedule }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenuClick = (event) => {
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
 
   const handleMenuClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleCardTap = () => {
+    onView(client);
   };
 
   const getProjectTypeColor = (type) => {
@@ -59,40 +64,77 @@ const ClientCard = ({ client, onEdit, onView, onDelete, onSchedule }) => {
   };
 
   return (
-    <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <CardContent sx={{ flexGrow: 1 }}>
+    <Card 
+      sx={{ 
+        height: '100%', 
+        display: 'flex', 
+        flexDirection: 'column',
+        cursor: 'pointer',
+        transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+        '&:hover': {
+          transform: 'translateY(-2px)',
+          boxShadow: 3,
+        },
+        '&:active': {
+          transform: 'translateY(0px)',
+          boxShadow: 1,
+        }
+      }}
+      onClick={handleCardTap}
+    >
+      <CardContent sx={{ flexGrow: 1, p: { xs: 2, sm: 3 } }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-          <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>
+          <Avatar sx={{ bgcolor: 'primary.main', mr: 2, width: 40, height: 40 }}>
             <PersonIcon />
           </Avatar>
-          <IconButton onClick={handleMenuClick}>
+          <IconButton 
+            onClick={handleMenuClick}
+            sx={{ 
+              p: 1,
+              '&:hover': { backgroundColor: 'action.hover' }
+            }}
+          >
             <MoreIcon />
           </IconButton>
           <Menu
             anchorEl={anchorEl}
             open={Boolean(anchorEl)}
             onClose={handleMenuClose}
+            PaperProps={{
+              sx: {
+                minWidth: 160,
+                '& .MuiMenuItem-root': {
+                  py: 1.5,
+                  px: 2,
+                }
+              }
+            }}
           >
             <MenuItem onClick={() => { onView(client); handleMenuClose(); }}>
-              <ViewIcon sx={{ mr: 1 }} />
+              <ViewIcon sx={{ mr: 1.5, fontSize: 20 }} />
               View Details
             </MenuItem>
             <MenuItem onClick={() => { onEdit(client); handleMenuClose(); }}>
-              <EditIcon sx={{ mr: 1 }} />
+              <EditIcon sx={{ mr: 1.5, fontSize: 20 }} />
               Edit
             </MenuItem>
             <MenuItem onClick={() => { onSchedule(client); handleMenuClose(); }}>
-              <ScheduleIcon sx={{ mr: 1 }} />
+              <ScheduleIcon sx={{ mr: 1.5, fontSize: 20 }} />
               Schedule
             </MenuItem>
-            <MenuItem onClick={() => { onDelete(client.id); handleMenuClose(); }}>
-              <DeleteIcon sx={{ mr: 1 }} />
+            <MenuItem onClick={() => { onDelete(client.id); handleMenuClose(); }} sx={{ color: 'error.main' }}>
+              <DeleteIcon sx={{ mr: 1.5, fontSize: 20 }} />
               Delete
             </MenuItem>
           </Menu>
         </Box>
         
-        <Typography variant="h6" component="div" gutterBottom>
+        <Typography variant="h6" component="div" gutterBottom sx={{ 
+          fontSize: { xs: '1.1rem', sm: '1.25rem' },
+          fontWeight: 600,
+          lineHeight: 1.2,
+          mb: 1
+        }}>
           {client.first_name} {client.last_name}
         </Typography>
         
@@ -101,33 +143,85 @@ const ClientCard = ({ client, onEdit, onView, onDelete, onSchedule }) => {
             label={client.project_type} 
             color={getProjectTypeColor(client.project_type)}
             size="small" 
-            sx={{ mb: 1 }} 
+            sx={{ 
+              mb: 2,
+              fontSize: '0.75rem',
+              height: 24
+            }} 
           />
         )}
         
-        <Box sx={{ mt: 2 }}>
+        <Box sx={{ mt: 2, space: 1 }}>
           {client.email && (
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-              <EmailIcon sx={{ fontSize: 16, mr: 1, color: 'text.secondary' }} />
-              <Typography variant="body2" color="text.secondary">
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              mb: 1.5,
+              p: 1,
+              borderRadius: 1,
+              backgroundColor: 'grey.50',
+              cursor: 'pointer',
+              '&:hover': { backgroundColor: 'grey.100' },
+              '&:active': { backgroundColor: 'grey.200' }
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              window.location.href = `mailto:${client.email}`;
+            }}
+            >
+              <EmailIcon sx={{ fontSize: 18, mr: 1.5, color: 'primary.main' }} />
+              <Typography variant="body2" color="text.primary" sx={{
+                fontSize: '0.875rem',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap'
+              }}>
                 {client.email}
               </Typography>
             </Box>
           )}
           
           {client.phone && (
-            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-              <PhoneIcon sx={{ fontSize: 16, mr: 1, color: 'text.secondary' }} />
-              <Typography variant="body2" color="text.secondary">
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center', 
+              mb: 1.5,
+              p: 1,
+              borderRadius: 1,
+              backgroundColor: 'grey.50',
+              cursor: 'pointer',
+              '&:hover': { backgroundColor: 'grey.100' },
+              '&:active': { backgroundColor: 'grey.200' }
+            }}
+            onClick={(e) => {
+              e.stopPropagation();
+              window.location.href = `tel:${client.phone}`;
+            }}
+            >
+              <PhoneIcon sx={{ fontSize: 18, mr: 1.5, color: 'success.main' }} />
+              <Typography variant="body2" color="text.primary" sx={{
+                fontSize: '0.875rem'
+              }}>
                 {client.phone}
               </Typography>
             </Box>
           )}
           
           {client.address?.city && (
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <LocationIcon sx={{ fontSize: 16, mr: 1, color: 'text.secondary' }} />
-              <Typography variant="body2" color="text.secondary">
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              p: 1,
+              borderRadius: 1,
+              backgroundColor: 'grey.50'
+            }}>
+              <LocationIcon sx={{ fontSize: 18, mr: 1.5, color: 'text.secondary' }} />
+              <Typography variant="body2" color="text.secondary" sx={{
+                fontSize: '0.875rem',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
+                whiteSpace: 'nowrap'
+              }}>
                 {client.address.city}, {client.address.state}
               </Typography>
             </Box>
@@ -135,9 +229,21 @@ const ClientCard = ({ client, onEdit, onView, onDelete, onSchedule }) => {
         </Box>
 
         {client.budget && (
-          <Typography variant="body2" color="primary" sx={{ mt: 2, fontWeight: 'bold' }}>
-            Budget: ${client.budget.toLocaleString()}
-          </Typography>
+          <Box sx={{ 
+            mt: 2, 
+            p: 1.5,
+            borderRadius: 1,
+            backgroundColor: 'primary.50',
+            border: '1px solid',
+            borderColor: 'primary.200'
+          }}>
+            <Typography variant="body2" color="primary.main" sx={{ 
+              fontWeight: 600,
+              fontSize: '0.875rem'
+            }}>
+              Budget: ${client.budget.toLocaleString()}
+            </Typography>
+          </Box>
         )}
       </CardContent>
     </Card>
@@ -256,35 +362,69 @@ const Clients = () => {
   }
 
   return (
-    <Box sx={{ maxWidth: '1400px', mx: 'auto', width: '100%' }}>
+    <Box sx={{ 
+      maxWidth: '1400px', 
+      mx: 'auto', 
+      width: '100%',
+      px: { xs: 1, sm: 2, md: 3 },
+      pb: { xs: 2, sm: 3 }
+    }}>
       <Box sx={{ 
         display: 'flex', 
         justifyContent: 'space-between', 
         alignItems: 'center', 
-        mb: { xs: 3, sm: 4 },
+        mb: { xs: 2, sm: 3 },
         flexDirection: { xs: 'column', sm: 'row' },
-        gap: { xs: 2, sm: 0 }
+        gap: { xs: 2, sm: 0 },
+        pt: { xs: 1, sm: 2 }
       }}>
-        <Typography variant="h4" sx={{ fontWeight: 600 }}>
+        <Typography variant="h4" sx={{ 
+          fontWeight: 600,
+          fontSize: { xs: '1.75rem', sm: '2.125rem' },
+          textAlign: { xs: 'center', sm: 'left' },
+          width: { xs: '100%', sm: 'auto' }
+        }}>
           Clients
         </Typography>
         <Button
           variant="contained"
           startIcon={<AddIcon />}
           onClick={handleAddClient}
+          sx={{
+            width: { xs: '100%', sm: 'auto' },
+            minWidth: { xs: '100%', sm: '140px' },
+            height: 44,
+            borderRadius: 2,
+            textTransform: 'none',
+            fontSize: '1rem',
+            fontWeight: 500
+          }}
         >
           Add Client
         </Button>
       </Box>
 
-      <Paper sx={{ p: { xs: 2, sm: 3 }, mb: { xs: 2, sm: 3 } }}>
-        <Grid container spacing={2} alignItems="center">
+      <Paper sx={{ 
+        p: { xs: 2, sm: 3 }, 
+        mb: { xs: 2, sm: 3 },
+        borderRadius: 2,
+        boxShadow: 1
+      }}>
+        <Grid container spacing={{ xs: 2, sm: 3 }} alignItems="center">
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
               label="Search clients..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                  '&:hover fieldset': {
+                    borderColor: 'primary.main',
+                  },
+                }
+              }}
             />
           </Grid>
           <Grid item xs={12} md={3}>
@@ -294,6 +434,11 @@ const Clients = () => {
               label="Project Type"
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  borderRadius: 2,
+                }
+              }}
             >
               {projectTypes.map((type) => (
                 <MenuItem key={type} value={type}>
@@ -303,16 +448,19 @@ const Clients = () => {
             </TextField>
           </Grid>
           <Grid item xs={12} md={3}>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body2" color="text.secondary" sx={{
+              textAlign: { xs: 'center', md: 'left' },
+              fontSize: '0.875rem'
+            }}>
               Total: {clients.length} clients
             </Typography>
           </Grid>
         </Grid>
       </Paper>
 
-      <Grid container spacing={{ xs: 2, sm: 3 }}>
+      <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
         {clients.map((client) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={client.id}>
+          <Grid item xs={12} sm={6} lg={4} xl={3} key={client.id}>
             <ClientCard
               client={client}
               onEdit={handleEditClient}
@@ -325,14 +473,43 @@ const Clients = () => {
       </Grid>
 
       {clients.length === 0 && (
-        <Paper sx={{ p: 4, textAlign: 'center' }}>
-          <Typography variant="h6" color="text.secondary">
+        <Paper sx={{ 
+          p: { xs: 3, sm: 4 }, 
+          textAlign: 'center',
+          borderRadius: 2,
+          boxShadow: 1
+        }}>
+          <PersonIcon sx={{ 
+            fontSize: { xs: 60, sm: 80 }, 
+            color: 'text.secondary', 
+            mb: 2 
+          }} />
+          <Typography variant="h6" color="text.secondary" sx={{ 
+            mb: 1,
+            fontSize: { xs: '1.1rem', sm: '1.25rem' }
+          }}>
             No clients found
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Add your first client to get started
+          <Typography variant="body2" color="text.secondary" sx={{ 
+            mb: 3,
+            fontSize: { xs: '0.875rem', sm: '0.875rem' },
+            maxWidth: 300,
+            mx: 'auto'
+          }}>
+            Add your first client to get started with managing your projects and estimates
           </Typography>
-          <Button variant="contained" onClick={handleAddClient}>
+          <Button 
+            variant="contained" 
+            onClick={handleAddClient}
+            sx={{
+              minWidth: { xs: '100%', sm: '160px' },
+              height: 44,
+              borderRadius: 2,
+              textTransform: 'none',
+              fontSize: '1rem',
+              fontWeight: 500
+            }}
+          >
             Add Client
           </Button>
         </Paper>

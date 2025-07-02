@@ -9,6 +9,8 @@ import {
   Menu,
   MenuItem,
   IconButton,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import { AccountCircle, Logout } from '@mui/icons-material';
 import { useAuth } from '../../contexts/AuthContext';
@@ -16,6 +18,8 @@ import { useAuth } from '../../contexts/AuthContext';
 const Navbar = () => {
   const { user, logout } = useAuth();
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -38,57 +42,72 @@ const Navbar = () => {
         background: 'linear-gradient(90deg, #1976d2 0%, #1565c0 100%)',
         color: 'white',
         boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+        left: { xs: 0, md: 240 }, // Account for sidebar on desktop
+        width: { xs: '100%', md: 'calc(100% - 240px)' },
       }}
     >
-      <Toolbar>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flexGrow: 1 }}>
+      <Toolbar sx={{ minHeight: { xs: 56, sm: 64 } }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 }, flexGrow: 1 }}>
           <Typography 
             variant="h6" 
             component="div" 
             sx={{ 
               color: 'white', 
               fontWeight: 700,
-              fontSize: '1.25rem'
+              fontSize: { xs: '1rem', sm: '1.25rem' },
+              lineHeight: 1.2,
             }}
           >
-            Surprise Granite CRM
+            {isMobile ? 'SG CRM' : 'Surprise Granite CRM'}
           </Typography>
-          <Typography 
-            variant="caption" 
-            sx={{ 
-              color: 'rgba(255,255,255,0.8)',
-              fontSize: '0.75rem',
-              fontWeight: 500,
-              backgroundColor: 'rgba(255,255,255,0.1)',
-              px: 1,
-              py: 0.5,
-              borderRadius: 1,
-            }}
-          >
-            Powered by Custom CRM
-          </Typography>
+          {!isMobile && (
+            <Typography 
+              variant="caption" 
+              sx={{ 
+                color: 'rgba(255,255,255,0.8)',
+                fontSize: '0.75rem',
+                fontWeight: 500,
+                backgroundColor: 'rgba(255,255,255,0.1)',
+                px: 1,
+                py: 0.5,
+                borderRadius: 1,
+                display: { xs: 'none', sm: 'block' }
+              }}
+            >
+              Powered by Custom CRM
+            </Typography>
+          )}
         </Box>
         
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.9)' }}>
-            Welcome, {user?.full_name || user?.username}
-          </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 } }}>
+          {!isMobile && (
+            <Typography variant="body2" sx={{ 
+              color: 'rgba(255,255,255,0.9)',
+              display: { xs: 'none', sm: 'block' }
+            }}>
+              Welcome, {user?.full_name || user?.username}
+            </Typography>
+          )}
           
           <IconButton
-            size="large"
+            size={isMobile ? "medium" : "large"}
             aria-label="account of current user"
             aria-controls="menu-appbar"
             aria-haspopup="true"
             onClick={handleMenu}
-            sx={{ color: 'white' }}
+            sx={{ 
+              color: 'white',
+              p: { xs: 1, sm: 1.5 }
+            }}
           >
             <Avatar 
               sx={{ 
-                width: 32, 
-                height: 32, 
+                width: { xs: 28, sm: 32 }, 
+                height: { xs: 28, sm: 32 }, 
                 bgcolor: 'rgba(255,255,255,0.2)',
                 color: 'white',
-                border: '2px solid rgba(255,255,255,0.3)'
+                border: '2px solid rgba(255,255,255,0.3)',
+                fontSize: { xs: '0.875rem', sm: '1rem' }
               }}
             >
               {(user?.full_name || user?.username)?.charAt(0).toUpperCase()}
@@ -109,13 +128,30 @@ const Navbar = () => {
             }}
             open={Boolean(anchorEl)}
             onClose={handleClose}
+            PaperProps={{
+              sx: {
+                minWidth: 160,
+                '& .MuiMenuItem-root': {
+                  py: 1.5,
+                  px: 2,
+                  fontSize: '0.875rem'
+                }
+              }
+            }}
           >
+            {isMobile && (
+              <MenuItem onClick={handleClose} disabled sx={{ opacity: 0.7 }}>
+                <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                  {user?.full_name || user?.username}
+                </Typography>
+              </MenuItem>
+            )}
             <MenuItem onClick={handleClose}>
-              <AccountCircle sx={{ mr: 1 }} />
+              <AccountCircle sx={{ mr: 1.5, fontSize: 20 }} />
               Profile
             </MenuItem>
             <MenuItem onClick={handleLogout}>
-              <Logout sx={{ mr: 1 }} />
+              <Logout sx={{ mr: 1.5, fontSize: 20 }} />
               Logout
             </MenuItem>
           </Menu>
