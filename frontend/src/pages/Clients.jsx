@@ -5,8 +5,19 @@ import {
   Button,
   Paper,
   Table,
-  TableBody,
-  TableCell,
+  T          <IconButton 
+            onClick={handleMenuClick}
+            sx={{ 
+              p: 1.5,
+              color: 'text.secondary',
+              '&:hover': { 
+                backgroundColor: 'action.hover',
+                color: 'primary.main'
+              }
+            }}
+          >
+            <MoreIcon />
+          </IconButton>TableCell,
   TableContainer,
   TableHead,
   TableRow,
@@ -71,27 +82,44 @@ const ClientCard = ({ client, onEdit, onView, onDelete, onSchedule }) => {
         flexDirection: 'column',
         cursor: 'pointer',
         transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+        borderRadius: 3,
+        overflow: 'hidden',
+        border: '1px solid',
+        borderColor: 'divider',
         '&:hover': {
-          transform: 'translateY(-2px)',
-          boxShadow: 3,
+          transform: 'translateY(-4px)',
+          boxShadow: '0 8px 25px rgba(0,0,0,0.12)',
+          borderColor: 'primary.main',
         },
         '&:active': {
-          transform: 'translateY(0px)',
-          boxShadow: 1,
+          transform: 'translateY(-2px)',
+          boxShadow: '0 4px 15px rgba(0,0,0,0.08)',
         }
       }}
       onClick={handleCardTap}
     >
-      <CardContent sx={{ flexGrow: 1, p: { xs: 2, sm: 3 } }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 2 }}>
-          <Avatar sx={{ bgcolor: 'primary.main', mr: 2, width: 40, height: 40 }}>
-            <PersonIcon />
+      <CardContent sx={{ flexGrow: 1, p: { xs: 3, sm: 3.5 } }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', mb: 3 }}>
+          <Avatar sx={{ 
+            bgcolor: 'primary.main', 
+            mr: 2, 
+            width: { xs: 48, sm: 52 }, 
+            height: { xs: 48, sm: 52 },
+            fontSize: { xs: '1.1rem', sm: '1.25rem' },
+            fontWeight: 600,
+            boxShadow: 2
+          }}>
+            <PersonIcon sx={{ fontSize: { xs: '1.5rem', sm: '1.75rem' } }} />
           </Avatar>
           <IconButton 
             onClick={handleMenuClick}
             sx={{ 
-              p: 1,
-              '&:hover': { backgroundColor: 'action.hover' }
+              p: 1.5,
+              color: 'text.secondary',
+              '&:hover': { 
+                backgroundColor: 'action.hover',
+                color: 'primary.main'
+              }
             }}
           >
             <MoreIcon />
@@ -405,12 +433,13 @@ const Clients = () => {
       </Box>
 
       <Paper sx={{ 
-        p: { xs: 2, sm: 3 }, 
-        mb: { xs: 2, sm: 3 },
-        borderRadius: 2,
-        boxShadow: 1
+        p: { xs: 3, sm: 4, md: 4 }, 
+        mb: { xs: 3, sm: 4 },
+        borderRadius: 3,
+        boxShadow: 2,
+        background: 'linear-gradient(135deg, #f8f9ff 0%, #ffffff 100%)'
       }}>
-        <Grid container spacing={{ xs: 2, sm: 3 }} alignItems="center">
+        <Grid container spacing={{ xs: 3, sm: 4 }} alignItems="center">
           <Grid item xs={12} md={6}>
             <TextField
               fullWidth
@@ -420,6 +449,7 @@ const Clients = () => {
               sx={{
                 '& .MuiOutlinedInput-root': {
                   borderRadius: 2,
+                  backgroundColor: 'white',
                   '&:hover fieldset': {
                     borderColor: 'primary.main',
                   },
@@ -437,6 +467,7 @@ const Clients = () => {
               sx={{
                 '& .MuiOutlinedInput-root': {
                   borderRadius: 2,
+                  backgroundColor: 'white',
                 }
               }}
             >
@@ -450,7 +481,8 @@ const Clients = () => {
           <Grid item xs={12} md={3}>
             <Typography variant="body2" color="text.secondary" sx={{
               textAlign: { xs: 'center', md: 'left' },
-              fontSize: '0.875rem'
+              fontSize: '0.875rem',
+              fontWeight: 500
             }}>
               Total: {clients.length} clients
             </Typography>
@@ -458,7 +490,7 @@ const Clients = () => {
         </Grid>
       </Paper>
 
-      <Grid container spacing={{ xs: 2, sm: 2.5, md: 3 }}>
+      <Grid container spacing={{ xs: 3, sm: 3, md: 4 }}>
         {clients.map((client) => (
           <Grid item xs={12} sm={6} lg={4} xl={3} key={client.id}>
             <ClientCard

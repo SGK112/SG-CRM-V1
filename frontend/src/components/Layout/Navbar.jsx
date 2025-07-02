@@ -48,18 +48,21 @@ const Navbar = () => {
     >
       <Toolbar sx={{ minHeight: { xs: 56, sm: 64 } }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 }, flexGrow: 1 }}>
-          <Typography 
-            variant="h6" 
-            component="div" 
-            sx={{ 
-              color: 'white', 
-              fontWeight: 700,
-              fontSize: { xs: '1rem', sm: '1.25rem' },
-              lineHeight: 1.2,
-            }}
-          >
-            {isMobile ? 'SG CRM' : 'Surprise Granite'}
-          </Typography>
+          {/* Only show company name on mobile when sidebar is hidden */}
+          {isMobile && (
+            <Typography 
+              variant="h6" 
+              component="div" 
+              sx={{ 
+                color: 'white', 
+                fontWeight: 700,
+                fontSize: '1rem',
+                lineHeight: 1.2,
+              }}
+            >
+              SG CRM
+            </Typography>
+          )}
         </Box>
         
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 } }}>
