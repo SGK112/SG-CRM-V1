@@ -15,6 +15,13 @@ const getApiUrl = () => {
     }
   }
   
+  // For local development, use the production backend to avoid bandwidth usage
+  if (currentUrl.includes('localhost:3000')) {
+    const productionUrl = 'https://sg-crm-v1.onrender.com/api';
+    console.log('Local development detected, using production API URL:', productionUrl);
+    return productionUrl;
+  }
+  
   // Default to environment variable or localhost
   const defaultUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
   console.log('Using default API URL:', defaultUrl);

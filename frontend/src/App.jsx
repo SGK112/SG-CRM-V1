@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Box, useTheme, useMediaQuery } from '@mui/material';
+import { Box, useTheme, useMediaQuery, Typography } from '@mui/material';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Navbar from './components/Layout/Navbar';
 import Sidebar from './components/Layout/Sidebar';
@@ -68,11 +68,39 @@ const AppLayout = ({ children }) => {
   );
 };
 
+const RootRedirect = () => {
+  const { isAuthenticated } = useAuth();
+  return <Navigate to={isAuthenticated ? "/dashboard" : "/login"} />;
+};
+
 function App() {
   return (
     <AuthProvider>
-      <AppLayout>
-        <Routes>
+      <AuthenticatedApp />
+    </AuthProvider>
+  );
+}
+
+function AuthenticatedApp() {
+  const { loading } = useAuth();
+
+  if (loading) {
+    return (
+      <Box sx={{ 
+        minHeight: '100vh',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}>
+        <Typography variant="h6" color="white">Loading...</Typography>
+      </Box>
+    );
+  }
+
+  return (
+    <AppLayout>
+      <Routes>
             <Route path="/login" element={<Login />} />
             <Route 
               path="/dashboard" 
@@ -162,9 +190,8 @@ function App() {
                 </ProtectedRoute>
               } 
             />
-            <Route path="/" element={<Navigate to="/dashboard" />} />        </Routes>
-      </AppLayout>
-    </AuthProvider>
+            <Route path="/" element={<RootRedirect />} />        </Routes>
+    </AppLayout>
   );
 }
 
