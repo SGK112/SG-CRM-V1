@@ -58,25 +58,8 @@ const Navbar = () => {
               lineHeight: 1.2,
             }}
           >
-            {isMobile ? 'SG CRM' : 'Surprise Granite CRM'}
+            {isMobile ? 'SG CRM' : 'Surprise Granite'}
           </Typography>
-          {!isMobile && (
-            <Typography 
-              variant="caption" 
-              sx={{ 
-                color: 'rgba(255,255,255,0.8)',
-                fontSize: '0.75rem',
-                fontWeight: 500,
-                backgroundColor: 'rgba(255,255,255,0.1)',
-                px: 1,
-                py: 0.5,
-                borderRadius: 1,
-                display: { xs: 'none', sm: 'block' }
-              }}
-            >
-              Powered by Custom CRM
-            </Typography>
-          )}
         </Box>
         
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 } }}>
