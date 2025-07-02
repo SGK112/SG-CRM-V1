@@ -48,21 +48,7 @@ const Navbar = () => {
     >
       <Toolbar sx={{ minHeight: { xs: 56, sm: 64 } }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 }, flexGrow: 1 }}>
-          {/* Only show company name on mobile when sidebar is hidden */}
-          {isMobile && (
-            <Typography 
-              variant="h6" 
-              component="div" 
-              sx={{ 
-                color: 'white', 
-                fontWeight: 700,
-                fontSize: '1rem',
-                lineHeight: 1.2,
-              }}
-            >
-              SG CRM
-            </Typography>
-          )}
+          {/* Remove company name from navbar completely */}
         </Box>
         
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 } }}>
