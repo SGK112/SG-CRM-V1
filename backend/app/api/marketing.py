@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from typing import Dict, List, Optional
 import json
 from datetime import datetime, timedelta
-from ..models.user import get_current_user
+from .auth import get_current_user
 
 router = APIRouter()
 
