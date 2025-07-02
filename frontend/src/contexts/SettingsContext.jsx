@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import api from '../services/api';
+import api, { marketingApi } from '../services/api';
 
 const SettingsContext = createContext();
 
@@ -51,6 +51,76 @@ export const SettingsProvider = ({ children }) => {
         accountSid: '',
         authToken: '',
         phoneNumber: '',
+      },
+      // Social Media Integrations
+      social_facebook: {
+        connected: false,
+        enabled: false,
+        appId: '',
+        appSecret: '',
+        accessToken: '',
+        pageId: '',
+        autoPost: false,
+      },
+      social_twitter: {
+        connected: false,
+        enabled: false,
+        apiKey: '',
+        apiSecret: '',
+        accessToken: '',
+        accessTokenSecret: '',
+        autoPost: false,
+      },
+      social_instagram: {
+        connected: false,
+        enabled: false,
+        appId: '',
+        appSecret: '',
+        accessToken: '',
+        autoPost: false,
+      },
+      social_linkedin: {
+        connected: false,
+        enabled: false,
+        clientId: '',
+        clientSecret: '',
+        accessToken: '',
+        autoPost: false,
+      },
+      social_youtube: {
+        connected: false,
+        enabled: false,
+        apiKey: '',
+        clientId: '',
+        clientSecret: '',
+        channelId: '',
+        autoPost: false,
+      },
+    },
+    marketing: {
+      campaigns: [],
+      scheduledPosts: [],
+      analytics: {
+        googleAnalytics: {
+          connected: false,
+          trackingId: '',
+        },
+        facebookPixel: {
+          connected: false,
+          pixelId: '',
+        },
+      },
+      seo: {
+        googleSearchConsole: {
+          connected: false,
+          siteUrl: '',
+        },
+        keywords: [],
+        metaTags: {
+          title: '',
+          description: '',
+          keywords: '',
+        },
       },
     },
     features: {
@@ -144,6 +214,80 @@ export const SettingsProvider = ({ children }) => {
     }
   };
 
+  // Marketing-specific methods
+  const updateSocialMediaPlatform = async (platform, config) => {
+    try {
+      const response = await marketingApi.configurePlatform(platform, config);
+      
+      // Update local settings
+      const updatedSettings = {
+        ...settings,
+        socialMedia: {
+          ...settings.socialMedia,
+          [platform]: {
+            ...settings.socialMedia[platform],
+            ...config,
+          },
+        },
+      };
+      
+      setSettings(updatedSettings);
+      return { success: true, data: response.data };
+    } catch (error) {
+      return { 
+        success: false, 
+        error: error.response?.data?.detail || 'Failed to update platform' 
+      };
+    }
+  };
+
+  const createMarketingPost = async (content, platforms, scheduleTime = null) => {
+    try {
+      const response = await marketingApi.createPost(content, platforms, scheduleTime);
+      return { success: true, data: response.data };
+    } catch (error) {
+      return { 
+        success: false, 
+        error: error.response?.data?.detail || 'Failed to create post' 
+      };
+    }
+  };
+
+  const getMarketingAnalytics = async (platform = null, days = 30) => {
+    try {
+      const response = await marketingApi.getAnalytics(platform, days);
+      return { success: true, data: response.data };
+    } catch (error) {
+      return { 
+        success: false, 
+        error: error.response?.data?.detail || 'Failed to get analytics' 
+      };
+    }
+  };
+
+  const createMarketingCampaign = async (campaignData) => {
+    try {
+      const response = await marketingApi.createCampaign(campaignData);
+      
+      // Update local campaigns
+      const updatedSettings = {
+        ...settings,
+        marketing: {
+          ...settings.marketing,
+          campaigns: [...settings.marketing.campaigns, response.data],
+        },
+      };
+      
+      setSettings(updatedSettings);
+      return { success: true, data: response.data };
+    } catch (error) {
+      return { 
+        success: false, 
+        error: error.response?.data?.detail || 'Failed to create campaign' 
+      };
+    }
+  };
+
   const value = {
     settings,
     loading,
@@ -151,6 +295,11 @@ export const SettingsProvider = ({ children }) => {
     updateIntegration,
     testIntegration,
     loadSettings,
+    // Marketing methods
+    updateSocialMediaPlatform,
+    createMarketingPost,
+    getMarketingAnalytics,
+    createMarketingCampaign,
   };
 
   return (

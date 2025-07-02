@@ -7,7 +7,7 @@ import os
 from pathlib import Path
 
 from app.database import connect_to_mongo, close_mongo_connection
-from app.api import auth, vendors, estimates, contracts, payments, pdf_upload, clients, contractors, appointments, services
+from app.api import auth, vendors, estimates, contracts, payments, pdf_upload, clients, contractors, appointments, services, marketing
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -63,6 +63,7 @@ app.include_router(estimates.router, prefix="/api/estimates", tags=["Estimates"]
 app.include_router(contracts.router, prefix="/api/contracts", tags=["Contracts"])
 app.include_router(payments.router, prefix="/api/payments", tags=["Payments"])
 app.include_router(pdf_upload.router, prefix="/api/upload", tags=["File Upload"])
+app.include_router(marketing.router, prefix="/api/marketing", tags=["Marketing"])
 
 @app.get("/")
 async def root():

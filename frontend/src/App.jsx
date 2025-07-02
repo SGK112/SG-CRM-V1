@@ -14,6 +14,8 @@ import Vendors from './pages/Vendors';
 import Estimates from './pages/Estimates';
 import Contracts from './pages/Contracts';
 import Payments from './pages/Payments';
+import MarketingDashboard from './pages/MarketingDashboard';
+import Settings from './pages/Admin/Settings';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -141,6 +143,22 @@ function App() {
               element={
                 <ProtectedRoute>
                   <Payments />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/marketing" 
+              element={
+                <ProtectedRoute>
+                  <MarketingDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin/settings" 
+              element={
+                <ProtectedRoute>
+                  <Settings />
                 </ProtectedRoute>
               } 
             />

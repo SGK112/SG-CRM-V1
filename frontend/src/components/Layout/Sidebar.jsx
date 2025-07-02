@@ -40,6 +40,7 @@ const menuItems = [
   { text: 'Estimate Builder', icon: <EstimatesIcon />, path: '/estimate-builder' },
   { text: 'Contractors', icon: <ContractorsIcon />, path: '/contractors' },
   { text: 'Calendar', icon: <CalendarIcon />, path: '/calendar' },
+  { text: 'Marketing', icon: <CampaignIcon />, path: '/marketing' },
   { text: 'Files', icon: <ServicesIcon />, path: '/files' },
   { text: 'Vendors', icon: <VendorsIcon />, path: '/vendors' },
   { text: 'Contracts', icon: <ContractsIcon />, path: '/contracts' },

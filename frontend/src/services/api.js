@@ -56,4 +56,26 @@ api.interceptors.response.use(
   }
 );
 
+// Marketing API methods
+export const marketingApi = {
+  // Social Media Platform Configuration
+  configurePlatform: (platform, config) => api.post(`/marketing/platforms/${platform}/configure`, config),
+  getPlatforms: () => api.get('/marketing/platforms'),
+  
+  // Social Media Posts
+  createPost: (content, platforms, scheduleTime = null) => 
+    api.post('/marketing/posts', { content, platforms, schedule_time: scheduleTime }),
+  getPosts: () => api.get('/marketing/posts'),
+  
+  // Analytics
+  getAnalytics: (platform = null, days = 30) => 
+    api.get('/marketing/analytics', { params: { platform, days } }),
+  
+  // Marketing Campaigns
+  createCampaign: (campaignData) => api.post('/marketing/campaigns', campaignData),
+  getCampaigns: () => api.get('/marketing/campaigns'),
+  updateCampaign: (campaignId, updates) => api.put(`/marketing/campaigns/${campaignId}`, updates),
+  deleteCampaign: (campaignId) => api.delete(`/marketing/campaigns/${campaignId}`),
+};
+
 export default api;
