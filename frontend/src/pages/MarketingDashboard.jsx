@@ -46,7 +46,7 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
 } from '@mui/icons-material';
-import { useSettings } from '../../contexts/SettingsContext';
+import { useSettings } from '../contexts/SettingsContext';
 
 const MarketingDashboard = () => {
   const { settings, updateSettings } = useSettings();
