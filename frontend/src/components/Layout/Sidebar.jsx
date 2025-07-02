@@ -28,6 +28,7 @@ import {
   Settings as SettingsIcon,
   Campaign as CampaignIcon,
   MoreHoriz as MoreIcon,
+  Inbox as InboxIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -35,6 +36,7 @@ const drawerWidth = 240;
 
 const menuItems = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
+  { text: 'Inbox', icon: <InboxIcon />, path: '/inbox' },
   { text: 'Clients', icon: <ClientsIcon />, path: '/clients' },
   { text: 'Estimates', icon: <EstimatesIcon />, path: '/estimates' },
   { text: 'Estimate Builder', icon: <EstimatesIcon />, path: '/estimate-builder' },
@@ -51,9 +53,9 @@ const menuItems = [
 // Mobile navigation items (most important for mobile)
 const mobileNavItems = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
+  { text: 'Inbox', icon: <InboxIcon />, path: '/inbox' },
   { text: 'Clients', icon: <ClientsIcon />, path: '/clients' },
   { text: 'Calendar', icon: <CalendarIcon />, path: '/calendar' },
-  { text: 'Estimates', icon: <EstimatesIcon />, path: '/estimates' },
   { text: 'More', icon: <MoreIcon />, path: '/more' },
 ];
 

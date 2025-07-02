@@ -16,6 +16,7 @@ import Contracts from './pages/Contracts';
 import Payments from './pages/Payments';
 import MarketingDashboard from './pages/MarketingDashboard';
 import Settings from './pages/Admin/Settings';
+import Inbox from './pages/Inbox';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -179,6 +180,14 @@ function AuthenticatedApp() {
               element={
                 <ProtectedRoute>
                   <MarketingDashboard />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/inbox" 
+              element={
+                <ProtectedRoute>
+                  <Inbox />
                 </ProtectedRoute>
               } 
             />
