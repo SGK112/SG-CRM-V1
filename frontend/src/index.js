@@ -6,6 +6,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Toaster } from 'react-hot-toast';
 import App from './App';
+import { SettingsProvider } from './contexts/SettingsContext';
 import './mobile.css';
 
 const queryClient = new QueryClient({
@@ -144,9 +145,10 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <HashRouter>
-          <App />
-          <Toaster 
+        <SettingsProvider>
+          <HashRouter>
+            <App />
+            <Toaster 
             position="top-center"
             toastOptions={{
               duration: 3000,
@@ -172,7 +174,8 @@ root.render(
               },
             }}
           />
-        </HashRouter>
+          </HashRouter>
+        </SettingsProvider>
       </ThemeProvider>
     </QueryClientProvider>
   </React.StrictMode>

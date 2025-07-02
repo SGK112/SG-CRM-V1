@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Drawer,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Toolbar,
   Divider,
   Box,
   Typography,
@@ -27,6 +26,7 @@ import {
   Event as CalendarIcon,
   HomeRepairService as ServicesIcon,
   Settings as SettingsIcon,
+  Campaign as CampaignIcon,
   MoreHoriz as MoreIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';

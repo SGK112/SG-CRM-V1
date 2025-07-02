@@ -13,7 +13,6 @@ import {
   FormControlLabel,
   Alert,
   Chip,
-  Divider,
   Avatar,
   List,
   ListItem,
@@ -24,19 +23,14 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
   Paper,
   FormControl,
   InputLabel,
   Select,
   MenuItem,
-  Tooltip,
 } from '@mui/material';
 import {
   Business as BusinessIcon,
-  Integration as IntegrationIcon,
   Security as SecurityIcon,
   Settings as SettingsIcon,
   CloudUpload,
@@ -53,9 +47,7 @@ import {
   Edit as EditIcon,
   Delete as DeleteIcon,
   Add as AddIcon,
-  ExpandMore as ExpandMoreIcon,
   Launch as LaunchIcon,
-  ContentCopy as CopyIcon,
   Schedule as ScheduleIcon,
 } from '@mui/icons-material';
 import { useSettings } from '../../contexts/SettingsContext';
@@ -524,7 +516,7 @@ const Settings = () => {
           scrollButtons="auto"
         >
           <Tab icon={<BusinessIcon />} label="Company" />
-          <Tab icon={<IntegrationIcon />} label="Integrations" />
+          <Tab icon={<SettingsIcon />} label="Integrations" />
           <Tab icon={<ShareIcon />} label="Social Media" />
           <Tab icon={<CampaignIcon />} label="Marketing" />
           <Tab icon={<AnalyticsIcon />} label="Analytics" />
