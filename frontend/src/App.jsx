@@ -5,18 +5,19 @@ import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Navbar from './components/Layout/Navbar';
 import Sidebar from './components/Layout/Sidebar';
 import Login from './pages/Login';
-import Dashboard from './pages/Dashboard';
+import EnhancedDashboard from './pages/EnhancedDashboard';
 import Clients from './pages/Clients';
 import Contractors from './pages/Contractors';
 import Calendar from './pages/Calendar';
 import Services from './pages/Services';
 import Vendors from './pages/Vendors';
-import Estimates from './pages/Estimates';
+import EnhancedEstimates from './pages/EnhancedEstimates';
 import Contracts from './pages/Contracts';
 import Payments from './pages/Payments';
 import MarketingDashboard from './pages/MarketingDashboard';
-import Settings from './pages/Admin/Settings';
+import EnhancedSettings from './pages/Admin/EnhancedSettings';
 import Inbox from './pages/Inbox';
+import CRMCopilot from './components/CRMCopilot';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -107,7 +108,7 @@ function AuthenticatedApp() {
               path="/dashboard" 
               element={
                 <ProtectedRoute>
-                  <Dashboard />
+                  <EnhancedDashboard />
                 </ProtectedRoute>
               } 
             />
@@ -155,7 +156,15 @@ function AuthenticatedApp() {
               path="/estimates" 
               element={
                 <ProtectedRoute>
-                  <Estimates />
+                  <EnhancedEstimates />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/estimates/builder" 
+              element={
+                <ProtectedRoute>
+                  <EnhancedEstimates />
                 </ProtectedRoute>
               } 
             />
@@ -195,11 +204,12 @@ function AuthenticatedApp() {
               path="/admin/settings" 
               element={
                 <ProtectedRoute>
-                  <Settings />
+                  <EnhancedSettings />
                 </ProtectedRoute>
               } 
             />
             <Route path="/" element={<RootRedirect />} />        </Routes>
+      <CRMCopilot />
     </AppLayout>
   );
 }

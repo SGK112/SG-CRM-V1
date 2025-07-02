@@ -56,7 +56,7 @@ import {
   Person as PersonIcon,
   Business as BusinessIcon,
   Close as CloseIcon,
-  Mark as MarkIcon,
+  Check as CheckIcon,
   Refresh as RefreshIcon,
 } from '@mui/icons-material';
 import { useQuery } from 'react-query';
@@ -245,7 +245,7 @@ const Inbox = () => {
             </Tooltip>
             <Tooltip title="Mark all as read">
               <IconButton sx={{ color: '#8B4513' }}>
-                <MarkIcon />
+                <CheckIcon />
               </IconButton>
             </Tooltip>
             <Button
