@@ -5,19 +5,8 @@ import {
   Button,
   Paper,
   Table,
-  T          <IconButton 
-            onClick={handleMenuClick}
-            sx={{ 
-              p: 1.5,
-              color: 'text.secondary',
-              '&:hover': { 
-                backgroundColor: 'action.hover',
-                color: 'primary.main'
-              }
-            }}
-          >
-            <MoreIcon />
-          </IconButton>TableCell,
+  TableBody,
+  TableCell,
   TableContainer,
   TableHead,
   TableRow,
