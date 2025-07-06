@@ -1,6 +1,8 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import JSONResponse
+from fastapi.exceptions import RequestValidationError
 from contextlib import asynccontextmanager
 import logging
 import os
@@ -28,6 +30,21 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+# Custom exception handlers
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    return JSONResponse(
+        status_code=422,
+        content={"detail": "Validation error", "errors": exc.errors()},
+    )
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail},
+    )
+
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
@@ -35,6 +52,7 @@ app.add_middleware(
         "http://localhost:3000", 
         "http://127.0.0.1:3000",
         "https://sg-crm-frontend.onrender.com",
+        "https://sg-crm-v1.onrender.com",
         "https://*.onrender.com",
         "https://*.render.com",
         "https://*.app.github.dev",
@@ -42,8 +60,9 @@ app.add_middleware(
         "https://super-space-bassoon-v6vwqw9vvw55269r5-3000.app.github.dev"
     ],
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
+    expose_headers=["*"],
 )
 
 # Mount static files if directory exists

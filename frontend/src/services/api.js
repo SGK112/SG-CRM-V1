@@ -15,15 +15,22 @@ const getApiUrl = () => {
     }
   }
   
-  // For local development, use the production backend to avoid bandwidth usage
-  if (currentUrl.includes('localhost:3000')) {
+  // For production on Render.com
+  if (currentUrl.includes('sg-crm-frontend.onrender.com')) {
     const productionUrl = 'https://sg-crm-v1.onrender.com/api';
-    console.log('Local development detected, using production API URL:', productionUrl);
+    console.log('Production frontend detected, using production API URL:', productionUrl);
     return productionUrl;
   }
   
-  // Default to environment variable or localhost
-  const defaultUrl = process.env.REACT_APP_API_URL || 'http://localhost:8000/api';
+  // For local development, use local backend
+  if (currentUrl.includes('localhost:3000')) {
+    const localUrl = 'http://localhost:8000/api';
+    console.log('Local development detected, using local API URL:', localUrl);
+    return localUrl;
+  }
+  
+  // Default to environment variable or production
+  const defaultUrl = process.env.REACT_APP_API_URL || 'https://sg-crm-v1.onrender.com/api';
   console.log('Using default API URL:', defaultUrl);
   return defaultUrl;
 };
