@@ -153,3 +153,29 @@ body {
     bottom: 16px;
   }
 }
+
+/* GLOBAL RULE: Bottom Right Corner Reserved for CRM Copilot */
+/* This ensures no other floating elements interfere with the CRM Copilot */
+.bottom-right-reserved {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Prevent any FAB or floating elements from using bottom-right corner */
+.MuiFab-root:not(.crm-copilot-fab) {
+  /* Ensure FABs are not in the bottom-right corner */
+  bottom: 16px !important;
+  right: 120px !important; /* Move away from copilot area */
+}
+
+@media (max-width: 768px) {
+  .MuiFab-root:not(.crm-copilot-fab) {
+    bottom: 80px !important; /* Above mobile nav */
+    right: 16px !important;
+  }
+}

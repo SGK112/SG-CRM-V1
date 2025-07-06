@@ -39,9 +39,10 @@ const Navbar = () => {
       position="fixed" 
       sx={{ 
         zIndex: (theme) => theme.zIndex.drawer + 1,
-        background: 'linear-gradient(90deg, #1976d2 0%, #1565c0 100%)',
-        color: 'white',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+        background: 'white',
+        color: '#333',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+        borderBottom: '1px solid #e0e0e0',
         left: { xs: 0, md: 240 }, // Account for sidebar on desktop
         width: { xs: '100%', md: 'calc(100% - 240px)' },
       }}
@@ -52,15 +53,6 @@ const Navbar = () => {
         </Box>
         
         <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, sm: 2 } }}>
-          {!isMobile && (
-            <Typography variant="body2" sx={{ 
-              color: 'rgba(255,255,255,0.9)',
-              display: { xs: 'none', sm: 'block' }
-            }}>
-              Welcome, {user?.full_name || user?.username}
-            </Typography>
-          )}
-          
           <IconButton
             size={isMobile ? "medium" : "large"}
             aria-label="account of current user"
@@ -68,7 +60,7 @@ const Navbar = () => {
             aria-haspopup="true"
             onClick={handleMenu}
             sx={{ 
-              color: 'white',
+              color: '#666',
               p: { xs: 1, sm: 1.5 }
             }}
           >
@@ -76,9 +68,9 @@ const Navbar = () => {
               sx={{ 
                 width: { xs: 28, sm: 32 }, 
                 height: { xs: 28, sm: 32 }, 
-                bgcolor: 'rgba(255,255,255,0.2)',
-                color: 'white',
-                border: '2px solid rgba(255,255,255,0.3)',
+                bgcolor: '#f5f5f5',
+                color: '#666',
+                border: '1px solid #e0e0e0',
                 fontSize: { xs: '0.875rem', sm: '1rem' }
               }}
             >

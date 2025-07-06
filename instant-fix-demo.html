@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Instant Fix System Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .demo-container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .button {
+            background: #1976d2;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        .button:hover {
+            background: #1565c0;
+        }
+        .api-test {
+            background: #e3f2fd;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            border-left: 4px solid #1976d2;
+        }
+        .response {
+            background: #f1f8e9;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        h1, h2 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🚀 Instant Fix System Demo</h1>
+        
+        <p>This demo shows how the instant fix system works. You can:</p>
+        <ul>
+            <li>Generate fix suggestions for common UI issues</li>
+            <li>Apply fixes instantly</li>
+            <li>View all bug reports and fixes</li>
+        </ul>
+
+        <div class="api-test">
+            <h2>📝 Create Fix Suggestion</h2>
+            <label>Bug Description:</label>
+            <textarea id="bugDescription" placeholder="Describe the issue you want to fix...">The submit button color is too dark and hard to read</textarea>
+            
+            <label>Element Selector (optional):</label>
+            <input type="text" id="elementSelector" placeholder=".submit-button, #header-nav, etc." value=".submit-button">
+            
+            <label>Page URL:</label>
+            <input type="text" id="pageUrl" value="https://shiny-giggle-69gw4wqgg777fr54-3000.app.github.dev/dashboard">
+            
+            <button class="button" onclick="suggestFix()">Generate Fix Suggestions</button>
+            <div id="suggestResponse" class="response" style="display: none;"></div>
+        </div>
+
+        <div class="api-test">
+            <h2>🔧 View All Fixes</h2>
+            <button class="button" onclick="loadFixes()">Load All Fixes</button>
+            <div id="fixesResponse" class="response" style="display: none;"></div>
+        </div>
+
+        <div class="api-test">
+            <h2>🐛 View Bug Reports</h2>
+            <button class="button" onclick="loadBugReports()">Load Bug Reports</button>
+            <div id="reportsResponse" class="response" style="display: none;"></div>
+        </div>
+
+        <div class="api-test">
+            <h2>📊 Quick Links</h2>
+            <button class="button" onclick="openInstantFixDashboard()">Open Instant Fix Dashboard</button>
+            <button class="button" onclick="openBugReports()">Open Bug Reports Viewer</button>
+            <button class="button" onclick="openApiDocs()">Open API Documentation</button>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://shiny-giggle-69gw4wqgg777fr54-8000.app.github.dev/api';
+        
+        async function suggestFix() {
+            const description = document.getElementById('bugDescription').value;
+            const selector = document.getElementById('elementSelector').value;
+            const url = document.getElementById('pageUrl').value;
+            
+            if (!description.trim()) {
+                alert('Please enter a bug description');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/instant-fix/suggest`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        bug_description: description,
+                        element_selector: selector || undefined,
+                        page_url: url
+                    })
+                });
+                
+                const data = await response.json();
+                displayResponse('suggestResponse', data, response.ok);
+            } catch (error) {
+                displayResponse('suggestResponse', { error: error.message }, false);
+            }
+        }
+        
+        async function loadFixes() {
+            try {
+                const response = await fetch(`${API_BASE}/instant-fix/`);
+                const data = await response.json();
+                displayResponse('fixesResponse', data, response.ok);
+            } catch (error) {
+                displayResponse('fixesResponse', { error: error.message }, false);
+            }
+        }
+        
+        async function loadBugReports() {
+            try {
+                const response = await fetch(`${API_BASE}/feedback/submissions`);
+                const data = await response.json();
+                displayResponse('reportsResponse', data, response.ok);
+            } catch (error) {
+                displayResponse('reportsResponse', { error: error.message }, false);
+            }
+        }
+        
+        function displayResponse(elementId, data, success) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = success ? 'response' : 'response error';
+            element.textContent = JSON.stringify(data, null, 2);
+        }
+        
+        function openInstantFixDashboard() {
+            window.open('https://shiny-giggle-69gw4wqgg777fr54-3000.app.github.dev/#/admin/instant-fixes', '_blank');
+        }
+        
+        function openBugReports() {
+            window.open('https://shiny-giggle-69gw4wqgg777fr54-3000.app.github.dev/#/admin/bug-reports', '_blank');
+        }
+        
+        function openApiDocs() {
+            window.open('https://shiny-giggle-69gw4wqgg777fr54-8000.app.github.dev/docs', '_blank');
+        }
+    </script>
+</body>
+</html>

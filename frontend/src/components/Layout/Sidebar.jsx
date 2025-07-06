@@ -29,6 +29,7 @@ import {
   Campaign as CampaignIcon,
   MoreHoriz as MoreIcon,
   Inbox as InboxIcon,
+  Article as FormsIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -39,11 +40,11 @@ const menuItems = [
   { text: 'Inbox', icon: <InboxIcon />, path: '/inbox' },
   { text: 'Clients', icon: <ClientsIcon />, path: '/clients' },
   { text: 'Estimates', icon: <EstimatesIcon />, path: '/estimates' },
-  { text: 'Estimate Builder', icon: <EstimatesIcon />, path: '/estimate-builder' },
   { text: 'Contractors', icon: <ContractorsIcon />, path: '/contractors' },
   { text: 'Calendar', icon: <CalendarIcon />, path: '/calendar' },
+  { text: 'Forms', icon: <FormsIcon />, path: '/forms' },
   { text: 'Marketing', icon: <CampaignIcon />, path: '/marketing' },
-  { text: 'Files', icon: <ServicesIcon />, path: '/files' },
+  { text: 'Services', icon: <ServicesIcon />, path: '/services' },
   { text: 'Vendors', icon: <VendorsIcon />, path: '/vendors' },
   { text: 'Contracts', icon: <ContractsIcon />, path: '/contracts' },
   { text: 'Payments', icon: <PaymentsIcon />, path: '/payments' },
@@ -55,7 +56,7 @@ const mobileNavItems = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
   { text: 'Inbox', icon: <InboxIcon />, path: '/inbox' },
   { text: 'Clients', icon: <ClientsIcon />, path: '/clients' },
-  { text: 'Calendar', icon: <CalendarIcon />, path: '/calendar' },
+  { text: 'Estimates', icon: <EstimatesIcon />, path: '/estimates' },
   { text: 'More', icon: <MoreIcon />, path: '/more' },
 ];
 
@@ -196,43 +197,47 @@ const Sidebar = () => {
       
       <Box sx={{ overflow: 'auto', flexGrow: 1 }}>
         <List sx={{ py: 1 }}>
-          {menuItems.map((item) => (
-            <ListItem
-              button
-              key={item.text}
-              onClick={() => navigate(item.path)}
-              selected={location.pathname === item.path}
-              sx={{
-                mx: 1,
-                borderRadius: 2,
-                mb: 0.5,
-                '&.Mui-selected': {
-                  backgroundColor: 'rgba(255,255,255,0.2)',
-                  color: 'white',
+          {menuItems.map((item) => {
+            const isSelected = location.pathname === item.path;
+            
+            return (
+              <ListItem
+                button
+                key={item.text}
+                onClick={() => navigate(item.path)}
+                selected={isSelected}
+                sx={{
+                  mx: 1,
+                  borderRadius: 2,
+                  mb: 0.5,
+                  '&.Mui-selected': {
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255,255,255,0.3)',
+                    },
+                    '& .MuiListItemIcon-root': {
+                      color: 'white',
+                    },
+                  },
                   '&:hover': {
-                    backgroundColor: 'rgba(255,255,255,0.3)',
+                    backgroundColor: 'rgba(255,255,255,0.1)',
                   },
                   '& .MuiListItemIcon-root': {
-                    color: 'white',
+                    color: 'rgba(255,255,255,0.8)',
+                    minWidth: 40,
                   },
-                },
-                '&:hover': {
-                  backgroundColor: 'rgba(255,255,255,0.1)',
-                },
-                '& .MuiListItemIcon-root': {
-                  color: 'rgba(255,255,255,0.8)',
-                  minWidth: 40,
-                },
-                '& .MuiListItemText-primary': {
-                  fontSize: '0.9rem',
-                  fontWeight: 500,
-                },
-              }}
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
+                  '& .MuiListItemText-primary': {
+                    fontSize: '0.9rem',
+                    fontWeight: 500,
+                  },
+                }}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </ListItem>
+            );
+          })}
         </List>
       </Box>
     </Drawer>

@@ -6,8 +6,7 @@ import logging
 import os
 from pathlib import Path
 
-from app.database import connect_to_mongo, close_mongo_connection
-from app.api import auth, vendors, estimates, contracts, payments, pdf_upload, clients, contractors, appointments, services, marketing
+from app.api import auth, vendors, estimates, contracts, payments, pdf_upload, clients, contractors, appointments, services, marketing, settings
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -17,11 +16,10 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     # Startup
     logger.info("Starting up...")
-    await connect_to_mongo()
+    # Skip MongoDB for now - using mock data
     yield
     # Shutdown
     logger.info("Shutting down...")
-    await close_mongo_connection()
 
 app = FastAPI(
     title="CRM & Estimating API",
@@ -40,6 +38,7 @@ app.add_middleware(
         "https://*.onrender.com",
         "https://*.render.com",
         "https://*.app.github.dev",
+        "https://shiny-giggle-69gw4wqgg777fr54-3000.app.github.dev",
         "https://super-space-bassoon-v6vwqw9vvw55269r5-3000.app.github.dev"
     ],
     allow_credentials=True,
@@ -64,6 +63,7 @@ app.include_router(contracts.router, prefix="/api/contracts", tags=["Contracts"]
 app.include_router(payments.router, prefix="/api/payments", tags=["Payments"])
 app.include_router(pdf_upload.router, prefix="/api/upload", tags=["File Upload"])
 app.include_router(marketing.router, prefix="/api/marketing", tags=["Marketing"])
+app.include_router(settings.router, prefix="/api/settings", tags=["Settings"])
 
 @app.get("/")
 async def root():

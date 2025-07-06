@@ -148,13 +148,23 @@ export const SettingsProvider = ({ children }) => {
 
   const loadSettings = async () => {
     try {
+      // Try to get authenticated settings first
       const response = await api.get('/settings');
       setSettings(prevSettings => ({
         ...prevSettings,
         ...response.data,
       }));
     } catch (error) {
-      console.log('Settings not found, using defaults');
+      try {
+        // Fallback to public settings if not authenticated
+        const response = await api.get('/settings/public');
+        setSettings(prevSettings => ({
+          ...prevSettings,
+          ...response.data,
+        }));
+      } catch (publicError) {
+        console.log('Settings not found, using defaults');
+      }
     } finally {
       setLoading(false);
     }

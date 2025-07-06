@@ -100,6 +100,30 @@ async def update_settings(
         **{k: v for k, v in settings.items() if k != "_id"}
     )
 
+@router.get("/public", response_model=dict)
+async def get_public_settings(db=Depends(get_database)):
+    """Get public settings (no authentication required)"""
+    settings = await db.settings.find_one({})
+    if not settings:
+        # Return default public settings
+        return {
+            "theme": "light",
+            "company_name": "SG CRM",
+            "features": {
+                "marketing_enabled": True,
+                "stripe_enabled": True
+            }
+        }
+    
+    # Return only public settings
+    public_settings = {
+        "theme": settings.get("theme", "light"),
+        "company_name": settings.get("company_info", {}).get("name", "SG CRM"),
+        "features": settings.get("feature_flags", {})
+    }
+    
+    return public_settings
+
 @router.post("/test-integration/{integration_type}")
 async def test_integration(
     integration_type: str,

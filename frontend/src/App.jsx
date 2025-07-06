@@ -11,12 +11,13 @@ import Contractors from './pages/Contractors';
 import Calendar from './pages/Calendar';
 import Services from './pages/Services';
 import Vendors from './pages/Vendors';
-import EnhancedEstimates from './pages/EnhancedEstimates';
+import Estimates from './pages/Estimates';
 import Contracts from './pages/Contracts';
 import Payments from './pages/Payments';
 import MarketingDashboard from './pages/MarketingDashboard';
 import EnhancedSettings from './pages/Admin/EnhancedSettings';
 import Inbox from './pages/Inbox';
+import Forms from './pages/Forms';
 import CRMCopilot from './components/CRMCopilot';
 
 const ProtectedRoute = ({ children }) => {
@@ -156,15 +157,7 @@ function AuthenticatedApp() {
               path="/estimates" 
               element={
                 <ProtectedRoute>
-                  <EnhancedEstimates />
-                </ProtectedRoute>
-              } 
-            />
-            <Route 
-              path="/estimates/builder" 
-              element={
-                <ProtectedRoute>
-                  <EnhancedEstimates />
+                  <Estimates />
                 </ProtectedRoute>
               } 
             />
@@ -201,6 +194,14 @@ function AuthenticatedApp() {
               } 
             />
             <Route 
+              path="/forms" 
+              element={
+                <ProtectedRoute>
+                  <Forms />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
               path="/admin/settings" 
               element={
                 <ProtectedRoute>
@@ -208,6 +209,13 @@ function AuthenticatedApp() {
                 </ProtectedRoute>
               } 
             />
+            {/* Redirect old estimate builder route */}
+            <Route path="/estimate-builder" element={<Navigate to="/estimates" replace />} />
+            <Route path="/instant-fix" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/instant-fix/*" element={<Navigate to="/dashboard" replace />} />
+            <Route path="/admin/feedback" element={<Navigate to="/admin/settings" replace />} />
+            <Route path="/admin/bug-reports" element={<Navigate to="/admin/settings" replace />} />
+            <Route path="/files" element={<Navigate to="/services" replace />} />
             <Route path="/" element={<RootRedirect />} />        </Routes>
       <CRMCopilot />
     </AppLayout>

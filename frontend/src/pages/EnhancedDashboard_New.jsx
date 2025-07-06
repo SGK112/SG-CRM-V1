@@ -53,7 +53,6 @@ import {
   Notifications,
   Star,
   Warning,
-  Article,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
@@ -234,166 +233,61 @@ const EnhancedDashboard = () => {
     </Card>
   );
 
-  const QuickActions = () => {
-    const handleAddClient = () => {
-      navigate('/clients', { state: { openDialog: true } });
-    };
-
-    const handleNewEstimate = () => {
-      navigate('/estimates', { state: { createNew: true } });
-    };
-
-    const handleScheduleAppointment = () => {
-      navigate('/calendar', { state: { openDialog: true } });
-    };
-
-    const handleNewContract = () => {
-      navigate('/contracts', { state: { createNew: true } });
-    };
-
-    const handleViewReports = () => {
-      navigate('/payments');
-    };
-
-    const handleMarketingCampaign = () => {
-      navigate('/marketing');
-    };
-
-    const handleAccessForms = () => {
-      navigate('/forms');
-    };
-
-    return (
-      <Card>
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
-            Quick Actions
-          </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={6} sm={4} md={2}>
-              <Button
-                fullWidth
-                variant="outlined"
-                startIcon={<People />}
-                onClick={handleAddClient}
-                sx={{ 
-                  py: 1.5,
-                  '&:hover': {
-                    backgroundColor: 'primary.light',
-                    color: 'white'
-                  }
-                }}
-              >
-                Add Client
-              </Button>
-            </Grid>
-            <Grid item xs={6} sm={4} md={2}>
-              <Button
-                fullWidth
-                variant="outlined"
-                startIcon={<Description />}
-                onClick={handleNewEstimate}
-                sx={{ 
-                  py: 1.5,
-                  '&:hover': {
-                    backgroundColor: 'success.light',
-                    color: 'white'
-                  }
-                }}
-              >
-                New Estimate
-              </Button>
-            </Grid>
-            <Grid item xs={6} sm={4} md={2}>
-              <Button
-                fullWidth
-                variant="outlined"
-                startIcon={<Event />}
-                onClick={handleScheduleAppointment}
-                sx={{ 
-                  py: 1.5,
-                  '&:hover': {
-                    backgroundColor: 'info.light',
-                    color: 'white'
-                  }
-                }}
-              >
-                Schedule
-              </Button>
-            </Grid>
-            <Grid item xs={6} sm={4} md={2}>
-              <Button
-                fullWidth
-                variant="outlined"
-                startIcon={<Assignment />}
-                onClick={handleNewContract}
-                sx={{ 
-                  py: 1.5,
-                  '&:hover': {
-                    backgroundColor: 'warning.light',
-                    color: 'white'
-                  }
-                }}
-              >
-                Contract
-              </Button>
-            </Grid>
-            <Grid item xs={6} sm={4} md={2}>
-              <Button
-                fullWidth
-                variant="outlined"
-                startIcon={<AttachMoney />}
-                onClick={handleViewReports}
-                sx={{ 
-                  py: 1.5,
-                  '&:hover': {
-                    backgroundColor: 'secondary.light',
-                    color: 'white'
-                  }
-                }}
-              >
-                Payments
-              </Button>
-            </Grid>
-            <Grid item xs={6} sm={4} md={2}>
-              <Button
-                fullWidth
-                variant="outlined"
-                startIcon={<Analytics />}
-                onClick={handleMarketingCampaign}
-                sx={{ 
-                  py: 1.5,
-                  '&:hover': {
-                    backgroundColor: 'error.light',
-                    color: 'white'
-                  }
-                }}
-              >
-                Marketing
-              </Button>
-            </Grid>
-            <Grid item xs={6} sm={4} md={2}>
-              <Button
-                fullWidth
-                variant="outlined"
-                startIcon={<Article />}
-                onClick={handleAccessForms}
-                sx={{ 
-                  py: 1.5,
-                  '&:hover': {
-                    backgroundColor: 'purple',
-                    color: 'white'
-                  }
-                }}
-              >
-                Forms
-              </Button>
-            </Grid>
+  const QuickActions = () => (
+    <Card>
+      <CardContent>
+        <Typography variant="h6" gutterBottom>
+          Quick Actions
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={6} sm={3}>
+            <Button
+              fullWidth
+              variant="outlined"
+              startIcon={<People />}
+              onClick={() => navigate('/clients')}
+              sx={{ py: 1.5 }}
+            >
+              Add Client
+            </Button>
           </Grid>
-        </CardContent>
-      </Card>
-    );
-  };
+          <Grid item xs={6} sm={3}>
+            <Button
+              fullWidth
+              variant="outlined"
+              startIcon={<Description />}
+              onClick={() => navigate('/estimates')}
+              sx={{ py: 1.5 }}
+            >
+              New Estimate
+            </Button>
+          </Grid>
+          <Grid item xs={6} sm={3}>
+            <Button
+              fullWidth
+              variant="outlined"
+              startIcon={<Event />}
+              onClick={() => navigate('/calendar')}
+              sx={{ py: 1.5 }}
+            >
+              Schedule
+            </Button>
+          </Grid>
+          <Grid item xs={6} sm={3}>
+            <Button
+              fullWidth
+              variant="outlined"
+              startIcon={<Assignment />}
+              onClick={() => navigate('/contracts')}
+              sx={{ py: 1.5 }}
+            >
+              Contract
+            </Button>
+          </Grid>
+        </Grid>
+      </CardContent>
+    </Card>
+  );
 
   if (loading) {
     return (
@@ -424,11 +318,11 @@ const EnhancedDashboard = () => {
       {/* Header */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Box>
-          <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold', mb: 1, color: '#8B4513' }}>
-            🏗️ SG CRM Dashboard
+          <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold', mb: 1 }}>
+            Dashboard
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            Welcome back! Here's what's happening with your granite & countertop business.
+            Welcome back! Here's what's happening with your business.
           </Typography>
         </Box>
         

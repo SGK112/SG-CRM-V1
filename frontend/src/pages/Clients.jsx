@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Typography,
   Box,
@@ -63,11 +63,12 @@ import {
   Description as DescriptionIcon,
 } from '@mui/icons-material';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useNavigate, useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import api from '../services/api';
 import ClientDialog from '../components/ClientDialog';
 
-const ClientCard = ({ client, onEdit, onView, onDelete, onSchedule, onUploadFiles }) => {
+const ClientCard = ({ client, onEdit, onView, onDelete, onSchedule, onUploadFiles, onCreateEstimate, onCreateContract }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenuClick = (event) => {
@@ -356,6 +357,14 @@ const ClientCard = ({ client, onEdit, onView, onDelete, onSchedule, onUploadFile
           <ScheduleIcon sx={{ mr: 2, color: '#4caf50' }} />
           Schedule Visit
         </MenuItem>
+        <MenuItem onClick={() => { onCreateEstimate(client); handleMenuClose(); }}>
+          <AssessmentIcon sx={{ mr: 2, color: '#2196f3' }} />
+          Create Estimate
+        </MenuItem>
+        <MenuItem onClick={() => { onCreateContract(client); handleMenuClose(); }}>
+          <DescriptionIcon sx={{ mr: 2, color: '#ff9800' }} />
+          Create Contract
+        </MenuItem>
         <Divider sx={{ my: 1 }} />
         <MenuItem onClick={() => { onDelete(client.id); handleMenuClose(); }} sx={{ color: 'error.main' }}>
           <DeleteIcon sx={{ mr: 2 }} />
@@ -367,6 +376,8 @@ const ClientCard = ({ client, onEdit, onView, onDelete, onSchedule, onUploadFile
 };
 
 const Clients = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedClient, setSelectedClient] = useState(null);
   const [isViewMode, setIsViewMode] = useState(false);
@@ -378,6 +389,15 @@ const Clients = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [showFilters, setShowFilters] = useState(false);
   const queryClient = useQueryClient();
+
+  // Handle opening dialog from dashboard navigation
+  useEffect(() => {
+    if (location.state?.openDialog) {
+      setDialogOpen(true);
+      // Clear the state to prevent reopening on subsequent renders
+      window.history.replaceState({}, document.title);
+    }
+  }, [location.state]);
 
   const { data: clients = [], isLoading } = useQuery(
     ['clients', searchTerm, filterType, sortBy],
@@ -483,7 +503,47 @@ const Clients = () => {
   };
 
   const handleSchedule = (client) => {
-    toast.info(`Schedule feature coming soon for ${client.first_name} ${client.last_name}`);
+    // Navigate to calendar with client information
+    navigate('/calendar', { 
+      state: { 
+        openDialog: true, 
+        clientId: client.id,
+        clientName: `${client.first_name} ${client.last_name}`,
+        clientEmail: client.email,
+        clientPhone: client.phone,
+        projectType: client.project_type
+      } 
+    });
+  };
+
+  const handleCreateEstimate = (client) => {
+    // Navigate to estimates page with client information
+    navigate('/estimates', { 
+      state: { 
+        createNew: true, 
+        clientId: client.id,
+        clientName: `${client.first_name} ${client.last_name}`,
+        clientEmail: client.email,
+        clientPhone: client.phone,
+        projectType: client.project_type,
+        budget: client.budget
+      } 
+    });
+  };
+
+  const handleCreateContract = (client) => {
+    // Navigate to contracts page with client information
+    navigate('/contracts', { 
+      state: { 
+        createNew: true, 
+        clientId: client.id,
+        clientName: `${client.first_name} ${client.last_name}`,
+        clientEmail: client.email,
+        clientPhone: client.phone,
+        projectType: client.project_type,
+        budget: client.budget
+      } 
+    });
   };
 
   const projectTypes = ['all', 'kitchen', 'bathroom', 'commercial', 'outdoor', 'countertops', 'backsplash', 'other'];
@@ -673,6 +733,97 @@ const Clients = () => {
         </Box>
       </Paper>
 
+      {/* Quick Actions Bar */}
+      <Paper sx={{ 
+        p: 3, 
+        mb: 3, 
+        borderRadius: 4,
+        boxShadow: '0 4px 20px rgba(139, 69, 19, 0.08)',
+        border: '1px solid rgba(139, 69, 19, 0.1)'
+      }}>
+        <Typography variant="h6" sx={{ mb: 2, color: '#8B4513', fontWeight: 600 }}>
+          Quick Actions
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6} md={3}>
+            <Button
+              variant="outlined"
+              fullWidth
+              startIcon={<AddIcon />}
+              onClick={handleAddClient}
+              sx={{
+                py: 1.5,
+                borderColor: '#8B4513',
+                color: '#8B4513',
+                '&:hover': {
+                  borderColor: '#D4A574',
+                  backgroundColor: 'rgba(139, 69, 19, 0.1)'
+                }
+              }}
+            >
+              Add Client
+            </Button>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Button
+              variant="outlined"
+              fullWidth
+              startIcon={<AssessmentIcon />}
+              onClick={() => navigate('/estimates', { state: { createNew: true } })}
+              sx={{
+                py: 1.5,
+                borderColor: '#2196f3',
+                color: '#2196f3',
+                '&:hover': {
+                  borderColor: '#1976d2',
+                  backgroundColor: 'rgba(33, 150, 243, 0.1)'
+                }
+              }}
+            >
+              New Estimate
+            </Button>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Button
+              variant="outlined"
+              fullWidth
+              startIcon={<ScheduleIcon />}
+              onClick={() => navigate('/calendar', { state: { openDialog: true } })}
+              sx={{
+                py: 1.5,
+                borderColor: '#4caf50',
+                color: '#4caf50',
+                '&:hover': {
+                  borderColor: '#388e3c',
+                  backgroundColor: 'rgba(76, 175, 80, 0.1)'
+                }
+              }}
+            >
+              Schedule Visit
+            </Button>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Button
+              variant="outlined"
+              fullWidth
+              startIcon={<DescriptionIcon />}
+              onClick={() => navigate('/contracts', { state: { createNew: true } })}
+              sx={{
+                py: 1.5,
+                borderColor: '#ff9800',
+                color: '#ff9800',
+                '&:hover': {
+                  borderColor: '#f57c00',
+                  backgroundColor: 'rgba(255, 152, 0, 0.1)'
+                }
+              }}
+            >
+              New Contract
+            </Button>
+          </Grid>
+        </Grid>
+      </Paper>
+
       {/* Advanced Search and Filters */}
       <Paper sx={{ 
         p: { xs: 3, sm: 4 }, 
@@ -847,6 +998,8 @@ const Clients = () => {
               onDelete={handleDeleteClient}
               onSchedule={handleSchedule}
               onUploadFiles={handleUploadFiles}
+              onCreateEstimate={handleCreateEstimate}
+              onCreateContract={handleCreateContract}
             />
           </Grid>
         ))}
