@@ -3,10 +3,10 @@ from typing import List, Optional
 from bson import ObjectId
 from datetime import datetime
 
-from app.models.service import Service, ServiceCreate, ServiceUpdate, ServiceResponse
-from app.models.user import User
-from app.api.auth import get_current_active_user
-from app.database import get_database
+from ..models.service import Service, ServiceCreate, ServiceUpdate, ServiceResponse
+from ..models.user import User
+from .auth import get_current_active_user
+from ..database import get_database
 
 router = APIRouter()
 

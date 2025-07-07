@@ -4,9 +4,9 @@ import aiofiles
 import os
 from datetime import datetime
 
-from app.models.user import User
-from app.api.auth import get_current_active_user
-from app.services.pdf_parser import PDFParser
+from ..models.user import User
+from .auth import get_current_active_user
+from ..services.pdf_parser import PDFParser
 import cloudinary.uploader
 from decouple import config
 import logging

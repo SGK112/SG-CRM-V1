@@ -3,10 +3,10 @@ from typing import List, Optional
 from bson import ObjectId
 from datetime import datetime
 
-from app.models.client import Client, ClientCreate, ClientUpdate, ClientResponse
-from app.models.user import User
-from app.api.auth import get_current_active_user
-from app.database import get_database
+from ..models.client import Client, ClientCreate, ClientUpdate, ClientResponse
+from ..models.user import User
+from .auth import get_current_active_user
+from ..database import get_database
 
 router = APIRouter()
 
@@ -88,6 +88,11 @@ async def create_client(
     
     result = await db.clients.insert_one(client_dict)
     created_client = await db.clients.find_one({"_id": result.inserted_id})
+    
+    if not created_client:
+        # Fallback: return the client_dict with the inserted ID
+        client_dict["_id"] = result.inserted_id
+        return client_helper(client_dict)
     
     return client_helper(created_client)
 

@@ -6,7 +6,7 @@ import Navbar from './components/Layout/Navbar';
 import Sidebar from './components/Layout/Sidebar';
 import Login from './pages/Login';
 import EnhancedDashboard from './pages/EnhancedDashboard';
-import Clients from './pages/Clients';
+import SimpleClients from './pages/SimpleClients';
 import Contractors from './pages/Contractors';
 import Calendar from './pages/Calendar';
 import Services from './pages/Services';
@@ -118,7 +118,7 @@ function AuthenticatedApp() {
               path="/clients" 
               element={
                 <ProtectedRoute>
-                  <Clients />
+                  <SimpleClients />
                 </ProtectedRoute>
               } 
             />

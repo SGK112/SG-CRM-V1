@@ -2,11 +2,11 @@ from fastapi import APIRouter, Depends, HTTPException, status, Query, UploadFile
 from typing import List, Optional
 from datetime import datetime
 
-from app.models.vendor import Vendor, VendorCreate, VendorUpdate, VendorResponse
-from app.models.user import User
-from app.api.auth import get_current_active_user
-from app.database import get_database
-from app.services.pdf_parser import PDFParser
+from ..models.vendor import Vendor, VendorCreate, VendorUpdate, VendorResponse
+from ..models.user import User
+from .auth import get_current_active_user
+from ..database import get_database
+from ..services.pdf_parser import PDFParser
 from bson import ObjectId
 import logging
 

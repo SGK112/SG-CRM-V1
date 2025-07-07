@@ -25,15 +25,157 @@ class MockDatabase:
         self.payments = MockCollection()
 
 class MockCollection:
-    """Mock collection that returns None for all queries"""
+    """Mock collection that returns sample data for development"""
+    def __init__(self):
+        self.data = []
+        self.counter = 1
+    
     async def find_one(self, query=None):
+        if query and "_id" in query:
+            # First check if it's in our stored data
+            for doc in self.data:
+                if doc.get("_id") == query["_id"]:
+                    return doc
+            
+            # Return sample client data for specific IDs
+            return {
+                "_id": query["_id"],
+                "first_name": "John",
+                "last_name": "Doe",
+                "email": "john@example.com",
+                "phone": "+1234567890",
+                "project_type": "kitchen",
+                "project_description": "Kitchen renovation",
+                "budget": 50000,
+                "timeline": "3 months",
+                "address": {
+                    "street": "123 Main St",
+                    "city": "Anytown",
+                    "state": "CA",
+                    "zip_code": "12345"
+                },
+                "preferred_contact": "email",
+                "notes": "Sample client",
+                "lead_source": "website",
+                "is_active": True,
+                "preferred_appointment_time": "2025-01-01T09:00:00Z",
+                "project_status": "lead",
+                "created_at": "2025-01-01T00:00:00Z",
+                "updated_at": "2025-01-01T00:00:00Z"
+            }
+        
+        # Check for email queries (used for duplicate detection)
+        if query and "email" in query:
+            for doc in self.data:
+                if doc.get("email") == query["email"]:
+                    return doc
+            # Return None if no match found (allows new records)
+            return None
+        
+        # For other queries, return None to allow new records
         return None
     
-    async def find(self, query=None):
-        return []
+    def find(self, query=None):
+        # Return sample clients list plus any stored data as async iterator
+        class AsyncIterator:
+            def __init__(self, data):
+                self.data = data
+                self.index = 0
+                self._skip_count = 0
+                self._limit_count = len(data)
+            
+            def __aiter__(self):
+                return self
+            
+            async def __anext__(self):
+                # Apply skip and limit logic
+                while self.index < self._skip_count and self.index < len(self.data):
+                    self.index += 1
+                
+                if self.index >= len(self.data) or self.index >= (self._skip_count + self._limit_count):
+                    raise StopAsyncIteration
+                
+                result = self.data[self.index]
+                self.index += 1
+                return result
+            
+            def skip(self, n):
+                self._skip_count = n
+                return self
+            
+            def limit(self, n):
+                self._limit_count = n
+                return self
+        
+        # Start with stored data
+        data = list(self.data)
+        
+        # Add sample data if no stored data exists
+        if not data:
+            data = [{
+                "_id": "sample_id_1",
+                "first_name": "John",
+                "last_name": "Doe",
+                "email": "john@example.com",
+                "phone": "+1234567890",
+                "project_type": "kitchen",
+                "project_description": "Kitchen renovation",
+                "budget": 50000,
+                "timeline": "3 months",
+                "address": {
+                    "street": "123 Main St",
+                    "city": "Anytown",
+                    "state": "CA",
+                    "zip_code": "12345"
+                },
+                "preferred_contact": "email",
+                "notes": "Sample client",
+                "lead_source": "website",
+                "is_active": True,
+                "preferred_appointment_time": "2025-01-01T09:00:00Z",
+                "project_status": "lead",
+                "created_at": "2025-01-01T00:00:00Z",
+                "updated_at": "2025-01-01T00:00:00Z"
+            }, {
+                "_id": "sample_id_2",
+                "first_name": "Jane",
+                "last_name": "Smith",
+                "email": "jane@example.com",
+                "phone": "+1987654321",
+                "project_type": "bathroom",
+                "project_description": "Bathroom remodel",
+                "budget": 30000,
+                "timeline": "2 months",
+                "address": {
+                    "street": "456 Oak Ave",
+                    "city": "Somewhere",
+                    "state": "TX",
+                    "zip_code": "67890"
+                },
+                "preferred_contact": "phone",
+                "notes": "Another sample client",
+                "lead_source": "referral",
+                "is_active": True,
+                "preferred_appointment_time": "2025-01-01T14:00:00Z",
+                "project_status": "active",
+                "created_at": "2025-01-01T00:00:00Z",
+                "updated_at": "2025-01-01T00:00:00Z"
+            }]
+        
+        return AsyncIterator(data)
     
     async def insert_one(self, document):
-        return type('MockResult', (), {'inserted_id': 'mock_id'})()
+        from datetime import datetime
+        # Add timestamp and ID
+        document["_id"] = f"mock_id_{self.counter}"
+        if "created_at" not in document:
+            document["created_at"] = datetime.utcnow()
+        if "updated_at" not in document:
+            document["updated_at"] = datetime.utcnow()
+        self.counter += 1
+        # Store the document for later retrieval
+        self.data.append(document.copy())
+        return type('MockResult', (), {'inserted_id': document["_id"]})()
     
     async def update_one(self, query, update):
         return type('MockResult', (), {'modified_count': 1})()

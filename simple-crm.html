@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SG-CRM - Client Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            background: #34495e;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .stat-item {
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .actions {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-success:hover {
+            background: #219a52;
+        }
+
+        .form-container {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .form-container.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .file-upload-area {
+            border: 2px dashed #bdc3c7;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            margin: 20px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-upload-area:hover {
+            border-color: #3498db;
+            background: #f8f9fa;
+        }
+
+        .file-upload-area.dragover {
+            border-color: #27ae60;
+            background: #e8f5e8;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .clients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .client-card {
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 15px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .client-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-color: #3498db;
+        }
+
+        .client-name {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+
+        .client-info {
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .client-info strong {
+            color: #333;
+        }
+
+        .client-budget {
+            background: #3498db;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #bdc3c7;
+            border-radius: 6px;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .empty-state h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+            }
+            
+            .actions {
+                flex-direction: column;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 SG-CRM</h1>
+            <p>Surprise Granite & Cabinetry - Client Management System</p>
+            
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalClients">0</span>
+                    <span class="stat-label">Total Clients</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalRevenue">$0</span>
+                    <span class="stat-label">Pipeline Value</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="avgBudget">$0</span>
+                    <span class="stat-label">Average Budget</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="actions">
+                <button class="btn" onclick="toggleAddClientForm()">➕ Add New Client</button>
+                <button class="btn btn-success" onclick="toggleBulkUpload()">� Bulk Upload CSV</button>
+            </div>
+
+            <div id="alertContainer"></div>
+
+            <div class="form-container" id="addClientForm">
+                <h2 style="margin-bottom: 25px; color: #2c3e50;">Add New Client</h2>
+                <form id="clientForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name *</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name *</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">Email *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="projectType">Project Type</label>
+                            <select id="projectType" name="projectType">
+                                <option value="kitchen">Kitchen</option>
+                                <option value="bathroom">Bathroom</option>
+                                <option value="commercial">Commercial</option>
+                                <option value="outdoor">Outdoor</option>
+                                <option value="countertops">Countertops Only</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="budget">Budget ($)</label>
+                            <input type="number" id="budget" name="budget" min="0" step="100">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" id="address" name="address" placeholder="Street, City, State, ZIP">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="projectDescription">Project Description</label>
+                        <textarea id="projectDescription" name="projectDescription" rows="3" placeholder="Describe the project details..."></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="timeline">Timeline</label>
+                            <input type="text" id="timeline" name="timeline" placeholder="e.g., 2-3 months">
+                        </div>
+                        <div class="form-group">
+                            <label for="leadSource">Lead Source</label>
+                            <select id="leadSource" name="leadSource">
+                                <option value="website">Website</option>
+                                <option value="referral">Referral</option>
+                                <option value="google">Google</option>
+                                <option value="facebook">Facebook</option>
+                                <option value="instagram">Instagram</option>
+                                <option value="yelp">Yelp</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="notes">Notes</label>
+                        <textarea id="notes" name="notes" rows="2" placeholder="Additional notes..."></textarea>
+                    </div>
+
+                    <div class="actions">
+                        <button type="submit" class="btn">💾 Save Client</button>
+                        <button type="button" class="btn btn-secondary" onclick="cancelAddClient()">❌ Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="form-container" id="bulkUploadForm">
+                <h2 style="margin-bottom: 25px; color: #2c3e50;">Bulk Upload Clients</h2>
+                <div class="file-upload-area" onclick="document.getElementById('csvFile').click()">
+                    <h3>📄 Drop CSV File Here or Click to Browse</h3>
+                    <p>Upload a CSV file with your existing client data</p>
+                    <p style="font-size: 0.9rem; color: #666; margin-top: 10px;">
+                        Required columns: firstName, lastName, email<br>
+                        Optional: phone, projectType, budget, address, projectDescription, timeline, leadSource, notes
+                    </p>
+                </div>
+                <input type="file" id="csvFile" accept=".csv" style="display: none;" onchange="handleCSVUpload(event)">
+                <div class="actions">
+                    <button type="button" class="btn" onclick="downloadSampleCSV()">📥 Download Sample CSV</button>
+                    <button type="button" class="btn btn-secondary" onclick="cancelBulkUpload()">❌ Cancel</button>
+                </div>
+            </div>
+
+            <input type="text" class="search-bar" id="searchBar" placeholder="🔍 Search clients by name, email, or project type..." onkeyup="searchClients()">
+
+            <div class="clients-grid" id="clientsGrid">
+                <div class="empty-state">
+                    <h3>No Clients Yet</h3>
+                    <p>Add your first client to get started with managing your granite and cabinetry projects!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple client storage using localStorage
+        let clients = JSON.parse(localStorage.getItem('sg-crm-clients')) || [];
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            displayClients();
+            updateStats();
+            
+            // Add form submission handler
+            document.getElementById('clientForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                addClient();
+            });
+        });
+
+        function toggleAddClientForm() {
+            const form = document.getElementById('addClientForm');
+            const isVisible = form.classList.contains('active');
+            
+            if (isVisible) {
+                form.classList.remove('active');
+            } else {
+                form.classList.add('active');
+                // Focus first input
+                document.getElementById('firstName').focus();
+            }
+        }
+
+        function cancelAddClient() {
+            document.getElementById('addClientForm').classList.remove('active');
+            document.getElementById('clientForm').reset();
+        }
+
+        function addClient() {
+            const form = document.getElementById('clientForm');
+            const formData = new FormData(form);
+            
+            // Validate required fields
+            const firstName = formData.get('firstName').trim();
+            const lastName = formData.get('lastName').trim();
+            const email = formData.get('email').trim();
+            
+            if (!firstName || !lastName || !email) {
+                showAlert('Please fill in all required fields (First Name, Last Name, Email)', 'error');
+                return;
+            }
+            
+            // Check for duplicate email
+            if (clients.some(client => client.email.toLowerCase() === email.toLowerCase())) {
+                showAlert('A client with this email already exists!', 'error');
+                return;
+            }
+            
+            // Create client object
+            const client = {
+                id: Date.now().toString(),
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                phone: formData.get('phone') || '',
+                projectType: formData.get('projectType') || 'kitchen',
+                budget: parseInt(formData.get('budget')) || 0,
+                address: formData.get('address') || '',
+                projectDescription: formData.get('projectDescription') || '',
+                timeline: formData.get('timeline') || '',
+                leadSource: formData.get('leadSource') || 'website',
+                notes: formData.get('notes') || '',
+                createdAt: new Date().toISOString(),
+                status: 'lead'
+            };
+            
+            // Add to clients array
+            clients.push(client);
+            
+            // Save to localStorage
+            localStorage.setItem('sg-crm-clients', JSON.stringify(clients));
+            
+            // Update UI
+            displayClients();
+            updateStats();
+            
+            // Reset form and hide
+            form.reset();
+            document.getElementById('addClientForm').classList.remove('active');
+            
+            // Show success message
+            showAlert(`Client ${firstName} ${lastName} added successfully!`, 'success');
+        }
+
+        function displayClients() {
+            const grid = document.getElementById('clientsGrid');
+            const searchTerm = document.getElementById('searchBar').value.toLowerCase();
+            
+            let filteredClients = clients;
+            
+            if (searchTerm) {
+                filteredClients = clients.filter(client => 
+                    client.firstName.toLowerCase().includes(searchTerm) ||
+                    client.lastName.toLowerCase().includes(searchTerm) ||
+                    client.email.toLowerCase().includes(searchTerm) ||
+                    client.projectType.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            if (filteredClients.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <h3>${searchTerm ? 'No Results Found' : 'No Clients Yet'}</h3>
+                        <p>${searchTerm ? 'Try adjusting your search terms' : 'Add your first client to get started!'}</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = filteredClients.map(client => `
+                <div class="client-card" onclick="viewClient('${client.id}')">
+                    <div class="client-name">${client.firstName} ${client.lastName}</div>
+                    <div class="client-info"><strong>Email:</strong> ${client.email}</div>
+                    ${client.phone ? `<div class="client-info"><strong>Phone:</strong> ${client.phone}</div>` : ''}
+                    <div class="client-info"><strong>Project:</strong> ${client.projectType.charAt(0).toUpperCase() + client.projectType.slice(1)}</div>
+                    ${client.address ? `<div class="client-info"><strong>Address:</strong> ${client.address}</div>` : ''}
+                    ${client.timeline ? `<div class="client-info"><strong>Timeline:</strong> ${client.timeline}</div>` : ''}
+                    ${client.budget > 0 ? `<div class="client-budget">Budget: $${client.budget.toLocaleString()}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function searchClients() {
+            displayClients();
+        }
+
+        function viewClient(clientId) {
+            const client = clients.find(c => c.id === clientId);
+            if (!client) return;
+            
+            const details = `
+                Name: ${client.firstName} ${client.lastName}
+                Email: ${client.email}
+                Phone: ${client.phone || 'Not provided'}
+                Project: ${client.projectType}
+                Budget: $${client.budget.toLocaleString()}
+                Address: ${client.address || 'Not provided'}
+                Timeline: ${client.timeline || 'Not specified'}
+                Lead Source: ${client.leadSource}
+                Description: ${client.projectDescription || 'No description'}
+                Notes: ${client.notes || 'No notes'}
+                Created: ${new Date(client.createdAt).toLocaleDateString()}
+            `;
+            
+            if (confirm(`Client Details:\n\n${details}\n\nWould you like to delete this client?`)) {
+                deleteClient(clientId);
+            }
+        }
+
+        function deleteClient(clientId) {
+            clients = clients.filter(c => c.id !== clientId);
+            localStorage.setItem('sg-crm-clients', JSON.stringify(clients));
+            displayClients();
+            updateStats();
+            showAlert('Client deleted successfully', 'success');
+        }
+
+        function updateStats() {
+            const totalClients = clients.length;
+            const totalRevenue = clients.reduce((sum, client) => sum + client.budget, 0);
+            const avgBudget = totalClients > 0 ? Math.round(totalRevenue / totalClients) : 0;
+            
+            document.getElementById('totalClients').textContent = totalClients;
+            document.getElementById('totalRevenue').textContent = '$' + totalRevenue.toLocaleString();
+            document.getElementById('avgBudget').textContent = '$' + avgBudget.toLocaleString();
+        }
+
+        function showAlert(message, type) {
+            const container = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            
+            container.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        function toggleBulkUpload() {
+            const form = document.getElementById('bulkUploadForm');
+            const addForm = document.getElementById('addClientForm');
+            const isVisible = form.classList.contains('active');
+            
+            // Hide add client form if open
+            addForm.classList.remove('active');
+            
+            if (isVisible) {
+                form.classList.remove('active');
+            } else {
+                form.classList.add('active');
+            }
+        }
+
+        function cancelBulkUpload() {
+            document.getElementById('bulkUploadForm').classList.remove('active');
+        }
+
+        function downloadSampleCSV() {
+            const sampleData = [
+                ['firstName', 'lastName', 'email', 'phone', 'projectType', 'budget', 'address', 'projectDescription', 'timeline', 'leadSource', 'notes'],
+                ['John', 'Doe', 'john@example.com', '555-123-4567', 'kitchen', '25000', '123 Main St, City, State 12345', 'Kitchen renovation', '2-3 months', 'referral', 'Prefers granite countertops'],
+                ['Jane', 'Smith', 'jane@example.com', '555-987-6543', 'bathroom', '15000', '456 Oak Ave, City, State 67890', 'Bathroom remodel', '1-2 months', 'website', 'Interested in quartz']
+            ];
+            
+            const csv = sampleData.map(row => row.join(',')).join('\n');
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'sample-clients.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            showAlert('Sample CSV downloaded! Use this format for your bulk upload.', 'success');
+        }
+
+        function handleCSVUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const csv = e.target.result;
+                const lines = csv.split('\n');
+                
+                if (lines.length < 2) {
+                    showAlert('CSV file must contain at least a header row and one data row.', 'error');
+                    return;
+                }
+                
+                const headers = lines[0].split(',').map(h => h.trim());
+                const requiredHeaders = ['firstName', 'lastName', 'email'];
+                
+                // Check if required headers exist
+                const missingHeaders = requiredHeaders.filter(h => !headers.includes(h));
+                if (missingHeaders.length > 0) {
+                    showAlert(`Missing required columns: ${missingHeaders.join(', ')}`, 'error');
+                    return;
+                }
+                
+                let addedCount = 0;
+                let skippedCount = 0;
+                
+                // Process each row
+                for (let i = 1; i < lines.length; i++) {
+                    const row = lines[i].split(',').map(cell => cell.trim());
+                    if (row.length < headers.length || !row[0]) continue;
+                    
+                    const client = {};
+                    headers.forEach((header, index) => {
+                        client[header] = row[index] || '';
+                    });
+                    
+                    // Check for duplicate email
+                    if (clients.some(c => c.email.toLowerCase() === client.email.toLowerCase())) {
+                        skippedCount++;
+                        continue;
+                    }
+                    
+                    // Create client object
+                    const newClient = {
+                        id: Date.now().toString() + i,
+                        firstName: client.firstName || '',
+                        lastName: client.lastName || '',
+                        email: client.email || '',
+                        phone: client.phone || '',
+                        projectType: client.projectType || 'kitchen',
+                        budget: parseInt(client.budget) || 0,
+                        address: client.address || '',
+                        projectDescription: client.projectDescription || '',
+                        timeline: client.timeline || '',
+                        leadSource: client.leadSource || 'import',
+                        notes: client.notes || '',
+                        createdAt: new Date().toISOString(),
+                        status: 'lead'
+                    };
+                    
+                    clients.push(newClient);
+                    addedCount++;
+                }
+                
+                // Save to localStorage
+                localStorage.setItem('sg-crm-clients', JSON.stringify(clients));
+                
+                // Update UI
+                displayClients();
+                updateStats();
+                
+                // Hide form
+                document.getElementById('bulkUploadForm').classList.remove('active');
+                
+                // Show success message
+                showAlert(`Bulk upload completed! Added ${addedCount} clients. Skipped ${skippedCount} duplicates.`, 'success');
+            };
+            
+            reader.readAsText(file);
+        }
+    </script>
+</body>
+</html>

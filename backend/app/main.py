@@ -1,14 +1,15 @@
 from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, RedirectResponse
 from fastapi.exceptions import RequestValidationError
+from starlette.middleware.base import BaseHTTPMiddleware
 from contextlib import asynccontextmanager
 import logging
 import os
 from pathlib import Path
 
-from app.api import auth, vendors, estimates, contracts, payments, pdf_upload, clients, contractors, appointments, services, marketing, settings
+from .api import auth, vendors, estimates, contracts, payments, pdf_upload, clients, contractors, appointments, services, marketing, settings
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -48,22 +49,29 @@ async def http_exception_handler(request: Request, exc: HTTPException):
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000", 
-        "http://127.0.0.1:3000",
-        "https://sg-crm-frontend.onrender.com",
-        "https://sg-crm-v1.onrender.com",
-        "https://*.onrender.com",
-        "https://*.render.com",
-        "https://*.app.github.dev",
-        "https://shiny-giggle-69gw4wqgg777fr54-3000.app.github.dev",
-        "https://super-space-bassoon-v6vwqw9vvw55269r5-3000.app.github.dev"
-    ],
+    allow_origins=["*"],  # Allow all origins for development
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allow_headers=["*"],
     expose_headers=["*"],
 )
+
+# Add a middleware to handle redirects properly for CORS
+class CORSRedirectMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request, call_next):
+        response = await call_next(request)
+        
+        # If it's a redirect response, add CORS headers
+        if isinstance(response, RedirectResponse):
+            response.headers["Access-Control-Allow-Origin"] = "*"
+            response.headers["Access-Control-Allow-Credentials"] = "true"
+            response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
+            response.headers["Access-Control-Allow-Headers"] = "*"
+            response.headers["Access-Control-Expose-Headers"] = "*"
+        
+        return response
+
+app.add_middleware(CORSRedirectMiddleware)
 
 # Mount static files if directory exists
 static_dir = Path(__file__).parent.parent / "static"

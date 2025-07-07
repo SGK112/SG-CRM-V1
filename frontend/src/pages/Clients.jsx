@@ -65,7 +65,7 @@ import {
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { useNavigate, useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import api from '../services/api';
+import api, { clientsAPI } from '../services/api';
 import ClientDialog from '../components/ClientDialog';
 
 const ClientCard = ({ client, onEdit, onView, onDelete, onSchedule, onUploadFiles, onCreateEstimate, onCreateContract }) => {
@@ -423,7 +423,7 @@ const Clients = () => {
   };
 
   const createMutation = useMutation(
-    (clientData) => api.post('/clients', clientData),
+    (clientData) => clientsAPI.create(clientData),
     {
       onSuccess: () => {
         queryClient.invalidateQueries('clients');
@@ -438,7 +438,7 @@ const Clients = () => {
   );
 
   const updateMutation = useMutation(
-    ({ id, data }) => api.put(`/clients/${id}`, data),
+    ({ id, data }) => clientsAPI.update(id, data),
     {
       onSuccess: () => {
         queryClient.invalidateQueries('clients');

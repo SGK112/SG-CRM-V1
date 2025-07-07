@@ -3,12 +3,12 @@ from typing import List, Optional
 from datetime import datetime, timedelta
 import secrets
 
-from app.models.estimate import Estimate, EstimateCreate, EstimateUpdate, EstimateResponse, EstimateStatus
-from app.models.user import User
-from app.api.auth import get_current_active_user
-from app.database import get_database
-from app.services.pdf_generator import PDFGenerator
-from app.services.email_service import EmailService
+from ..models.estimate import Estimate, EstimateCreate, EstimateUpdate, EstimateResponse, EstimateStatus
+from ..models.user import User
+from .auth import get_current_active_user
+from ..database import get_database
+from ..services.pdf_generator import PDFGenerator
+from ..services.email_service import EmailService
 from bson import ObjectId
 import logging
 

@@ -3,10 +3,10 @@ from typing import List, Optional
 from bson import ObjectId
 from datetime import datetime
 
-from app.models.appointment import Appointment, AppointmentCreate, AppointmentUpdate, AppointmentResponse
-from app.models.user import User
-from app.api.auth import get_current_active_user
-from app.database import get_database
+from ..models.appointment import Appointment, AppointmentCreate, AppointmentUpdate, AppointmentResponse
+from ..models.user import User
+from .auth import get_current_active_user
+from ..database import get_database
 
 router = APIRouter()
 

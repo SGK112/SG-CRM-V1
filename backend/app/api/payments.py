@@ -4,11 +4,11 @@ from datetime import datetime
 import stripe
 from decouple import config
 
-from app.models.contract import Contract, ContractCreate, PaymentStatus
-from app.models.user import User
-from app.api.auth import get_current_active_user
-from app.database import get_database
-from app.services.stripe_service import StripeService
+from ..models.contract import Contract, ContractCreate, PaymentStatus
+from ..models.user import User
+from .auth import get_current_active_user
+from ..database import get_database
+from ..services.stripe_service import StripeService
 from bson import ObjectId
 import logging
 

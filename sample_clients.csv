@@ -1,0 +1,6 @@
+first_name,last_name,email,phone,project_type,project_description,budget,timeline,address_street,address_city,address_state,address_zip
+"Mary","Johnson","mary@example.com","+1555123456","bathroom","Master bathroom renovation",25000,"6 weeks","789 Pine St","Springfield","IL","62701"
+"Robert","Williams","robert@example.com","+1555987654","kitchen","Complete kitchen remodel",45000,"3 months","321 Elm St","Springfield","IL","62702"
+"Sarah","Brown","sarah@example.com","+1555456789","addition","Home addition project",75000,"4 months","654 Oak Ave","Springfield","IL","62703"
+"Michael","Davis","michael@example.com","+1555321654","deck","Deck construction",15000,"4 weeks","987 Maple Dr","Springfield","IL","62704"
+"Jennifer","Wilson","jennifer@example.com","+1555654321","flooring","Hardwood floor installation",12000,"2 weeks","147 Cedar Ln","Springfield","IL","62705"

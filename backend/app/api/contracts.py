@@ -3,12 +3,12 @@ from typing import List, Optional
 from datetime import datetime
 import secrets
 
-from app.models.contract import Contract, ContractCreate, ContractUpdate, ContractResponse, ContractStatus, PaymentStatus
-from app.models.user import User
-from app.api.auth import get_current_active_user
-from app.database import get_database
-from app.services.pdf_generator import PDFGenerator
-from app.services.email_service import EmailService
+from ..models.contract import Contract, ContractCreate, ContractUpdate, ContractResponse, ContractStatus, PaymentStatus
+from ..models.user import User
+from .auth import get_current_active_user
+from ..database import get_database
+from ..services.pdf_generator import PDFGenerator
+from ..services.email_service import EmailService
 from bson import ObjectId
 import logging
 

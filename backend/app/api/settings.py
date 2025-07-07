@@ -3,10 +3,10 @@ from typing import List, Optional
 from bson import ObjectId
 from datetime import datetime
 
-from app.models.settings import Settings, SettingsUpdate, SettingsResponse, CompanyInfo, IntegrationCredentials, FeatureFlags, UserPermissions
-from app.models.user import User
-from app.database import get_database
-from app.api.auth import get_current_user
+from ..models.settings import Settings, SettingsUpdate, SettingsResponse, CompanyInfo, IntegrationCredentials, FeatureFlags, UserPermissions
+from ..models.user import User
+from ..database import get_database
+from .auth import get_current_user
 
 router = APIRouter()
 
