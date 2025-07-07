@@ -31,7 +31,7 @@ import {
 import {
   Add as AddIcon,
   Delete as DeleteIcon,
-  Calculator as CalculatorIcon,
+  Calculate as CalculatorIcon,
   PictureAsPdf as PdfIcon,
   Send as SendIcon,
   Save as SaveIcon,

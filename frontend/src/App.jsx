@@ -11,7 +11,7 @@ import Contractors from './pages/Contractors';
 import Calendar from './pages/Calendar';
 import Services from './pages/Services';
 import Vendors from './pages/Vendors';
-import Estimates from './pages/Estimates';
+import Estimates from './pages/Estimates/EstimateBuilder';
 import Contracts from './pages/Contracts';
 import Payments from './pages/Payments';
 import MarketingDashboard from './pages/MarketingDashboard';
