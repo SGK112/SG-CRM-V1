@@ -96,14 +96,24 @@ export const AuthProvider = ({ children }) => {
         return { success: true };
       } catch (apiError) {
         // Backend is down, but allow demo login for specific credentials
-        if (username === 'admin@test.com' || username === 'admin' || password === 'admin123') {
-          const user = { id: 1, username: username, full_name: 'Admin User' };
+        if (username === 'test@mail.com' && password === 'password123') {
+          const user = { id: 1, username: username, full_name: 'Test User', email: username, is_admin: true };
           setUser(user);
           setIsAuthenticated(true);
           localStorage.setItem('user', JSON.stringify(user));
           localStorage.setItem('token', 'demo-token');
           return { success: true };
         }
+        
+        if (username === 'admin@test.com' || username === 'admin') {
+          const user = { id: 1, username: username, full_name: 'Admin User', email: username, is_admin: true };
+          setUser(user);
+          setIsAuthenticated(true);
+          localStorage.setItem('user', JSON.stringify(user));
+          localStorage.setItem('token', 'demo-token');
+          return { success: true };
+        }
+        
         throw apiError;
       }
     } catch (error) {
