@@ -521,12 +521,7 @@ const Clients = () => {
     navigate('/estimates', { 
       state: { 
         createNew: true, 
-        clientId: client.id,
-        clientName: `${client.first_name} ${client.last_name}`,
-        clientEmail: client.email,
-        clientPhone: client.phone,
-        projectType: client.project_type,
-        budget: client.budget
+        clientData: client
       } 
     });
   };

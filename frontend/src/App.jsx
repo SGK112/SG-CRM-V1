@@ -19,6 +19,7 @@ import EnhancedSettings from './pages/Admin/EnhancedSettings';
 import Inbox from './pages/Inbox';
 import Forms from './pages/Forms';
 import CRMCopilot from './components/CRMCopilot';
+import { Toaster } from 'react-hot-toast';
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -218,6 +219,16 @@ function AuthenticatedApp() {
             <Route path="/files" element={<Navigate to="/services" replace />} />
             <Route path="/" element={<RootRedirect />} />        </Routes>
       <CRMCopilot />
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#363636',
+            color: '#fff',
+          },
+        }}
+      />
     </AppLayout>
   );
 }

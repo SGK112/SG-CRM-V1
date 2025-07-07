@@ -38,9 +38,16 @@ import {
   Upload as UploadIcon,
 } from '@mui/icons-material';
 import { useSettings } from '../../contexts/SettingsContext';
+import { useMutation, useQueryClient } from 'react-query';
+import { useNavigate, useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import api from '../../services/api';
 
 const EstimateBuilder = () => {
   const { settings } = useSettings();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryClient = useQueryClient();
   const [estimate, setEstimate] = useState({
     clientInfo: {
       name: '',
@@ -97,6 +104,30 @@ const EstimateBuilder = () => {
   useEffect(() => {
     calculateTotals();
   }, [estimate.materials, estimate.labor, estimate.miscCosts, estimate.markup]);
+
+  // Initialize estimate with client data from navigation state
+  useEffect(() => {
+    if (location.state?.clientData) {
+      const { clientData } = location.state;
+      setEstimate(prev => ({
+        ...prev,
+        clientInfo: {
+          name: `${clientData.first_name} ${clientData.last_name}`,
+          email: clientData.email,
+          phone: clientData.phone,
+          address: clientData.address ? 
+            `${clientData.address.street}, ${clientData.address.city}, ${clientData.address.state} ${clientData.address.zip_code}` : 
+            '',
+          projectAddress: clientData.project_address || '',
+        },
+        project: {
+          ...prev.project,
+          type: clientData.project_type || 'kitchen',
+          description: clientData.project_description || '',
+        }
+      }));
+    }
+  }, [location.state]);
 
   const calculateTotals = () => {
     const materialCost = estimate.materials.reduce((sum, item) => 
@@ -228,6 +259,75 @@ const EstimateBuilder = () => {
     </Dialog>
   );
 
+  // Save mutation
+  const saveMutation = useMutation(
+    (estimateData) => api.post('/estimates', estimateData),
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries('estimates');
+        toast.success('Estimate saved successfully');
+        // Optionally navigate to estimates list or stay on current page
+      },
+      onError: (error) => {
+        toast.error(error.response?.data?.detail || 'Failed to save estimate');
+      },
+    }
+  );
+
+  // Send mutation
+  const sendMutation = useMutation(
+    (estimateData) => api.post('/estimates/send', estimateData),
+    {
+      onSuccess: () => {
+        toast.success('Estimate sent successfully');
+        navigate('/estimates');
+      },
+      onError: (error) => {
+        toast.error(error.response?.data?.detail || 'Failed to send estimate');
+      },
+    }
+  );
+
+  const handleSave = () => {
+    if (!estimate.clientInfo.name || !estimate.clientInfo.email) {
+      toast.error('Client information is required');
+      return;
+    }
+    
+    const estimateData = {
+      ...estimate,
+      status: 'draft',
+      created_at: new Date().toISOString(),
+    };
+    
+    saveMutation.mutate(estimateData);
+  };
+
+  const handleSend = () => {
+    if (!estimate.clientInfo.name || !estimate.clientInfo.email) {
+      toast.error('Client information is required');
+      return;
+    }
+    
+    if (estimate.totals.total <= 0) {
+      toast.error('Please add materials or labor to the estimate');
+      return;
+    }
+    
+    const estimateData = {
+      ...estimate,
+      status: 'sent',
+      sent_at: new Date().toISOString(),
+    };
+    
+    sendMutation.mutate(estimateData);
+  };
+
+  const handleGeneratePDF = () => {
+    // For now, just show a success message
+    toast.success('PDF generation functionality coming soon');
+  };
+
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
@@ -238,13 +338,13 @@ const EstimateBuilder = () => {
           <Button startIcon={<CalculatorIcon />} onClick={() => setShowCalculator(true)}>
             Calculator
           </Button>
-          <Button startIcon={<SaveIcon />} variant="outlined">
+          <Button startIcon={<SaveIcon />} variant="outlined" onClick={handleSave}>
             Save Draft
           </Button>
-          <Button startIcon={<PdfIcon />} variant="contained">
+          <Button startIcon={<PdfIcon />} variant="contained" onClick={handleGeneratePDF}>
             Generate PDF
           </Button>
-          <Button startIcon={<SendIcon />} variant="contained" color="success">
+          <Button startIcon={<SendIcon />} variant="contained" color="success" onClick={handleSend}>
             Send to Client
           </Button>
         </Box>
