@@ -221,8 +221,8 @@ const EnhancedDashboard = () => {
           </Box>
           <Avatar 
             sx={{ 
-              bgcolor: `${color}.light`,
-              color: `${color}.dark`,
+              bgcolor: `${color}.main`,
+              color: 'white',
               width: 56,
               height: 56
             }}
