@@ -15,10 +15,6 @@ import {
   Divider,
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
 
 const ClientDialog = ({ open, onClose, client, onSave, isViewMode = false, isLoading = false }) => {
   const { control, handleSubmit, setValue, reset, watch } = useForm({
@@ -41,7 +37,7 @@ const ClientDialog = ({ open, onClose, client, onSave, isViewMode = false, isLoa
       notes: '',
       lead_source: '',
       is_active: true,
-      preferred_appointment_time: null,
+      preferred_appointment_time: '',
       project_status: 'lead',
     },
   });
@@ -50,9 +46,7 @@ const ClientDialog = ({ open, onClose, client, onSave, isViewMode = false, isLoa
     if (client) {
       reset({
         ...client,
-        preferred_appointment_time: client.preferred_appointment_time 
-          ? dayjs(client.preferred_appointment_time)
-          : null
+        preferred_appointment_time: client.preferred_appointment_time || ''
       });
     } else {
       reset({
@@ -74,20 +68,19 @@ const ClientDialog = ({ open, onClose, client, onSave, isViewMode = false, isLoa
         notes: '',
         lead_source: '',
         is_active: true,
-        preferred_appointment_time: null,
+        preferred_appointment_time: '',
         project_status: 'lead',
       });
     }
   }, [client, reset]);
 
   const onSubmit = (data) => {
+    console.log('Form data:', data);
     const formattedData = {
       ...data,
       budget: data.budget ? parseFloat(data.budget) : null,
-      preferred_appointment_time: data.preferred_appointment_time 
-        ? data.preferred_appointment_time.toISOString()
-        : null
     };
+    console.log('Formatted data:', formattedData);
     onSave(formattedData);
   };
 
@@ -136,14 +129,13 @@ const ClientDialog = ({ open, onClose, client, onSave, isViewMode = false, isLoa
   ];
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-        <DialogTitle>
-          {isViewMode 
-            ? `Client Details - ${client?.first_name} ${client?.last_name}`
-            : client ? 'Edit Client' : 'Add New Client'
-          }
-        </DialogTitle>
+    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
+      <DialogTitle>
+        {isViewMode 
+          ? `Client Details - ${client?.first_name} ${client?.last_name}`
+          : client ? 'Edit Client' : 'Add New Client'
+        }
+      </DialogTitle>
         <DialogContent>
           <Box component="form" sx={{ mt: 2 }}>
             <Grid container spacing={2}>
@@ -474,15 +466,12 @@ const ClientDialog = ({ open, onClose, client, onSave, isViewMode = false, isLoa
                   name="preferred_appointment_time"
                   control={control}
                   render={({ field }) => (
-                    <DatePicker
+                    <TextField
                       {...field}
-                      label="Preferred Appointment Date"
+                      label="Preferred Appointment Time"
+                      fullWidth
                       disabled={isViewMode}
-                      slotProps={{
-                        textField: {
-                          fullWidth: true,
-                        },
-                      }}
+                      placeholder="e.g., Mornings, Afternoons, Weekends"
                     />
                   )}
                 />
@@ -542,7 +531,6 @@ const ClientDialog = ({ open, onClose, client, onSave, isViewMode = false, isLoa
           )}
         </DialogActions>
       </Dialog>
-    </LocalizationProvider>
   );
 };
 
