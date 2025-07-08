@@ -9,7 +9,7 @@ import logging
 import os
 from pathlib import Path
 
-from .api import auth, vendors, estimates, contracts, payments, pdf_upload, clients, contractors, appointments, services, marketing, settings
+from .api import auth, vendors, estimates, contracts, payments, pdf_upload, clients, contractors, appointments, services, marketing, settings, lead_capture, workflow
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -79,6 +79,8 @@ if static_dir.exists():
     app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
 # Include routers
+app.include_router(lead_capture.router, prefix="/api/leads", tags=["Lead Capture"])
+app.include_router(workflow.router, prefix="/api/workflow", tags=["Workflow Automation"])
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
 app.include_router(clients.router, prefix="/api/clients", tags=["Clients"])
 app.include_router(contractors.router, prefix="/api/contractors", tags=["Contractors"])

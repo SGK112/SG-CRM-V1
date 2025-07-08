@@ -1,7 +1,9 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { Box, useTheme, useMediaQuery, Typography } from '@mui/material';
+import { Box, useMediaQuery, Typography, ThemeProvider } from '@mui/material';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import mobileFirstTheme, { mobileStyles, mobileBreakpoints } from './theme/mobileFirstTheme';
+import './mobile-first.css';
 import Navbar from './components/Layout/Navbar';
 import Sidebar from './components/Layout/Sidebar';
 import Login from './pages/Login';
@@ -18,6 +20,7 @@ import MarketingDashboard from './pages/MarketingDashboard';
 import EnhancedSettings from './pages/Admin/EnhancedSettings';
 import Inbox from './pages/Inbox';
 import Forms from './pages/Forms';
+import LeadCaptureForm from './components/LeadCaptureForm';
 import CRMCopilot from './components/CRMCopilot';
 import { Toaster } from 'react-hot-toast';
 
@@ -28,17 +31,17 @@ const ProtectedRoute = ({ children }) => {
 
 const AppLayout = ({ children }) => {
   const { isAuthenticated } = useAuth();
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery(mobileFirstTheme.breakpoints.down('md'));
 
   if (!isAuthenticated) {
     return (
       <Box sx={{ 
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: 'linear-gradient(135deg, #4A90E2 0%, #B89778 100%)',
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        ...mobileStyles.mobileContainer
       }}>
         {children}
       </Box>
@@ -46,8 +49,12 @@ const AppLayout = ({ children }) => {
   }
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh' }}>
-      <Sidebar />
+    <Box sx={{ 
+      display: 'flex', 
+      minHeight: '100vh',
+      backgroundColor: '#F5F5F5'
+    }}>
+      {!isMobile && <Sidebar />}
       <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         <Navbar />
         <Box component="main" sx={{ 
@@ -79,9 +86,11 @@ const RootRedirect = () => {
 
 function App() {
   return (
-    <AuthProvider>
-      <AuthenticatedApp />
-    </AuthProvider>
+    <ThemeProvider theme={mobileFirstTheme}>
+      <AuthProvider>
+        <AuthenticatedApp />
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-    <meta name="theme-color" content="#1976d2" />
+    <meta name="theme-color" content="#4A90E2" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="SG CRM" />
@@ -11,7 +11,7 @@
     <meta name="format-detection" content="telephone=no" />
     <meta
       name="description"
-      content="Professional CRM and Estimating Application - Manage clients, contractors, and projects on the go"
+      content="Professional Stone & Granite CRM - Mobile-first design for countertop businesses"
     />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <!-- Apple Touch Icons -->
@@ -21,10 +21,53 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <title>CRM & Estimating</title>
+    <title>SG-CRM | Stone & Granite CRM</title>
+    <style>
+      /* Brand Colors CSS Variables */
+      :root {
+        --primary-color: #333333;
+        --secondary-color: #B89778;
+        --background-color: #F5F5F5;
+        --accent-color: #4A90E2;
+        --white: #FFFFFF;
+      }
+      
+      /* Initial loading styles */
+      body {
+        margin: 0;
+        background-color: var(--background-color);
+        color: var(--primary-color);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      }
+      
+      #root {
+        min-height: 100vh;
+      }
+      
+      /* Loading spinner */
+      .loading-spinner {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 40px;
+        height: 40px;
+        border: 3px solid var(--background-color);
+        border-top: 3px solid var(--accent-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+      }
+      
+      @keyframes spin {
+        0% { transform: translate(-50%, -50%) rotate(0deg); }
+        100% { transform: translate(-50%, -50%) rotate(360deg); }
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <div id="root">
+      <div class="loading-spinner"></div>
+    </div>
   </body>
 </html>

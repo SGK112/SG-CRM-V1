@@ -1,0 +1,99 @@
+{
+  "project": "SG-CRM-V1",
+  "description": "Complete CRM and Estimating Application for Construction/Granite Industry",
+  "technology_stack": [
+    "FastAPI (Python Backend)",
+    "React (Frontend)",
+    "MongoDB (Database)",
+    "Material-UI (UI Framework)",
+    "Stripe (Payments)",
+    "Docker (Containerization)"
+  ],
+  "key_features": [
+    "Client Management",
+    "Vendor Management",
+    "Estimate Generation",
+    "Contract Management",
+    "Payment Processing",
+    "PDF Generation",
+    "File Upload/Management",
+    "AI Integration (Grok AI)",
+    "Authentication (JWT)",
+    "Email Services"
+  ],
+  "project_structure": {
+    "backend/": {
+      "description": "FastAPI backend with MongoDB",
+      "key_files": [
+        "app/main.py - FastAPI application entry point",
+        "app/database.py - MongoDB connection",
+        "app/api/ - API route modules",
+        "app/models/ - Pydantic data models",
+        "app/services/ - Business logic services"
+      ]
+    },
+    "frontend/": {
+      "description": "React frontend with Material-UI",
+      "key_files": [
+        "src/App.jsx - Main React application",
+        "src/components/ - Reusable UI components",
+        "src/pages/ - Page components",
+        "src/services/ - API client services"
+      ]
+    }
+  },
+  "api_endpoints": {
+    "authentication": [
+      "/api/auth/register",
+      "/api/auth/token",
+      "/api/auth/me"
+    ],
+    "clients": [
+      "/api/clients",
+      "/api/clients/{id}"
+    ],
+    "vendors": [
+      "/api/vendors",
+      "/api/vendors/{id}"
+    ],
+    "estimates": [
+      "/api/estimates",
+      "/api/estimates/{id}",
+      "/api/estimates/{id}/generate-pdf"
+    ],
+    "contracts": [
+      "/api/contracts",
+      "/api/contracts/{id}"
+    ],
+    "payments": [
+      "/api/payments",
+      "/api/payments/process"
+    ]
+  },
+  "database_collections": [
+    "users - User accounts and authentication",
+    "clients - Client information and projects",
+    "vendors - Vendor details and pricing",
+    "estimates - Project estimates and line items",
+    "contracts - Contracts and agreements",
+    "services - Available services and pricing"
+  ],
+  "deployment_info": {
+    "status": "Production Ready",
+    "backend_url": "http://localhost:8000",
+    "frontend_url": "http://localhost:3000",
+    "api_docs": "http://localhost:8000/docs",
+    "database": "MongoDB running in Docker",
+    "sample_data": "Vendor data loaded from CSV"
+  },
+  "recent_developments": [
+    "Full CRM functionality implemented",
+    "MongoDB integration with sample vendor data",
+    "React frontend with all major pages",
+    "Estimate builder with line items",
+    "PDF generation and email services",
+    "Stripe payment integration",
+    "AI integration with Grok AI",
+    "Complete authentication system"
+  ]
+}

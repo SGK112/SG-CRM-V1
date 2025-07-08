@@ -22,7 +22,7 @@ async def load_csv_data():
         db = await get_database()
         
         # Read CSV file
-        csv_path = "/workspaces/vendor-data/Ai chat price list 2025 - Sheet1 (11).csv"
+        csv_path = "/workspaces/SG-CRM-V1/Ai chat price list 2025 - Sheet1 (11).csv"
         
         if not os.path.exists(csv_path):
             print(f"CSV file not found: {csv_path}")

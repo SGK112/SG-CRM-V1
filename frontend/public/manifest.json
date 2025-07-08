@@ -1,19 +1,69 @@
 {
   "short_name": "SG CRM",
-  "name": "SG CRM - Professional Management App",
-  "description": "Manage clients, contractors, estimates, and projects efficiently",
+  "name": "SG CRM - Stone & Granite Business Management",
+  "description": "Mobile-first CRM for stone & granite countertop businesses. Manage clients, contractors, estimates, and projects efficiently.",
   "icons": [
     {
       "src": "favicon.ico",
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
+    },
+    {
+      "src": "favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon-16x16.png",
+      "sizes": "16x16",
+      "type": "image/png"
     }
   ],
   "start_url": ".",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "theme_color": "#1976d2",
-  "background_color": "#ffffff",
-  "categories": ["business", "productivity"],
-  "prefer_related_applications": false
+  "theme_color": "#4A90E2",
+  "background_color": "#F5F5F5",
+  "categories": ["business", "productivity", "utilities"],
+  "prefer_related_applications": false,
+  "lang": "en-US",
+  "scope": "/",
+  "shortcuts": [
+    {
+      "name": "Dashboard",
+      "short_name": "Dashboard",
+      "description": "View your business dashboard",
+      "url": "/dashboard",
+      "icons": [
+        {
+          "src": "favicon-32x32.png",
+          "sizes": "32x32"
+        }
+      ]
+    },
+    {
+      "name": "Clients",
+      "short_name": "Clients",
+      "description": "Manage your clients",
+      "url": "/clients",
+      "icons": [
+        {
+          "src": "favicon-32x32.png",
+          "sizes": "32x32"
+        }
+      ]
+    },
+    {
+      "name": "New Lead",
+      "short_name": "New Lead",
+      "description": "Add a new lead",
+      "url": "/leads/new",
+      "icons": [
+        {
+          "src": "favicon-32x32.png",
+          "sizes": "32x32"
+        }
+      ]
+    }
+  ]
 }

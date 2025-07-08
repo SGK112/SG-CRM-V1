@@ -191,100 +191,253 @@ class EmailService:
             logger.error(f"Error sending notification email: {e}")
             raise
 
+    async def send_welcome_email(
+        self,
+        to_email: str,
+        client_name: str,
+        lead_info: Dict[str, Any]
+    ):
+        """Send welcome email to new leads"""
+        try:
+            subject = f"Thank you for your interest, {client_name}!"
+            
+            html_body = f"""
+            <html>
+                <head>
+                    <style>
+                        body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
+                        .header {{ background-color: #f8f9fa; padding: 20px; text-align: center; }}
+                        .content {{ padding: 20px; }}
+                        .highlight {{ background-color: #e9ecef; padding: 15px; border-radius: 5px; }}
+                        .button {{ background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; }}
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h2>Welcome to StoneCraft Granite & Countertops!</h2>
+                    </div>
+                    
+                    <div class="content">
+                        <h3>Hello {client_name},</h3>
+                        
+                        <p>Thank you for your interest in our {lead_info.get('project_type', 'renovation')} services! We're excited to help bring your vision to life.</p>
+                        
+                        <div class="highlight">
+                            <h4>What happens next?</h4>
+                            <ul>
+                                <li>Our team will review your project details</li>
+                                <li>We'll contact you within 24 hours to discuss your needs</li>
+                                <li>We'll schedule a free consultation at your convenience</li>
+                                <li>You'll receive a detailed estimate within 48 hours of consultation</li>
+                            </ul>
+                        </div>
+                        
+                        <h4>Your Project Details:</h4>
+                        <ul>
+                            <li><strong>Project Type:</strong> {lead_info.get('project_type', 'N/A')}</li>
+                            <li><strong>Timeline:</strong> {lead_info.get('timeline', 'N/A')}</li>
+                            <li><strong>Description:</strong> {lead_info.get('project_description', 'N/A')}</li>
+                        </ul>
+                        
+                        <p>In the meantime, feel free to browse our portfolio and learn more about our services:</p>
+                        
+                        <p style="text-align: center;">
+                            <a href="https://yourwebsite.com/portfolio" class="button">View Our Portfolio</a>
+                        </p>
+                        
+                        <p>If you have any immediate questions, don't hesitate to contact us:</p>
+                        <ul>
+                            <li>📞 Phone: (555) 123-4567</li>
+                            <li>📧 Email: info@yourcompany.com</li>
+                            <li>🌐 Website: www.yourcompany.com</li>
+                        </ul>
+                        
+                        <p>Best regards,<br/>
+                        The StoneCraft Team</p>
+                    </div>
+                </body>
+            </html>
+            """
+            
+            await self._send_email(
+                to_email=to_email,
+                subject=subject,
+                html_body=html_body
+            )
+            
+            logger.info(f"Welcome email sent to {to_email}")
+        
+        except Exception as e:
+            logger.error(f"Error sending welcome email: {e}")
+            raise
+
+    async def send_follow_up_email(
+        self,
+        to_email: str,
+        client_name: str,
+        follow_up_type: str = "general",
+        custom_message: str = None
+    ):
+        """Send follow-up emails based on type"""
+        try:
+            templates = {
+                "initial": {
+                    "subject": f"Following up on your {client_name} project",
+                    "message": "We wanted to follow up on your recent inquiry. Are you still interested in moving forward with your project?"
+                },
+                "consultation": {
+                    "subject": f"Ready to schedule your consultation, {client_name}?",
+                    "message": "We're ready to schedule your free consultation. When would be a good time for you?"
+                },
+                "estimate": {
+                    "subject": f"Your estimate is ready, {client_name}!",
+                    "message": "We've prepared your detailed estimate. Would you like to schedule a time to review it together?"
+                },
+                "contract": {
+                    "subject": f"Contract signing - {client_name}",
+                    "message": "Your contract is ready for signature. We're excited to get started on your project!"
+                }
+            }
+            
+            template = templates.get(follow_up_type, templates["initial"])
+            subject = template["subject"]
+            message = custom_message or template["message"]
+            
+            html_body = f"""
+            <html>
+                <head></head>
+                <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                    <h3>Hello {client_name},</h3>
+                    
+                    <p>{message}</p>
+                    
+                    <p>We're here to answer any questions you might have about:</p>
+                    <ul>
+                        <li>Materials and design options</li>
+                        <li>Timeline and scheduling</li>
+                        <li>Pricing and payment options</li>
+                        <li>Installation process</li>
+                    </ul>
+                    
+                    <p>Please reply to this email or call us at (555) 123-4567 to discuss your project further.</p>
+                    
+                    <p>Best regards,<br/>
+                    The StoneCraft Team</p>
+                </body>
+            </html>
+            """
+            
+            await self._send_email(
+                to_email=to_email,
+                subject=subject,
+                html_body=html_body
+            )
+            
+            logger.info(f"Follow-up email ({follow_up_type}) sent to {to_email}")
+        
+        except Exception as e:
+            logger.error(f"Error sending follow-up email: {e}")
+            raise
+
+    async def send_payment_reminder(
+        self,
+        to_email: str,
+        client_name: str,
+        invoice_data: Dict[str, Any],
+        reminder_type: str = "gentle"
+    ):
+        """Send payment reminder emails"""
+        try:
+            templates = {
+                "gentle": {
+                    "subject": f"Payment Reminder - Invoice #{invoice_data.get('invoice_number')}",
+                    "tone": "friendly"
+                },
+                "urgent": {
+                    "subject": f"URGENT: Payment Overdue - Invoice #{invoice_data.get('invoice_number')}",
+                    "tone": "urgent"
+                },
+                "final": {
+                    "subject": f"FINAL NOTICE - Invoice #{invoice_data.get('invoice_number')}",
+                    "tone": "final"
+                }
+            }
+            
+            template = templates.get(reminder_type, templates["gentle"])
+            subject = template["subject"]
+            
+            html_body = f"""
+            <html>
+                <head></head>
+                <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                    <h3>Hello {client_name},</h3>
+                    
+                    <p>This is a {"friendly" if reminder_type == "gentle" else "urgent"} reminder that payment for your invoice is {"approaching its due date" if reminder_type == "gentle" else "overdue"}.</p>
+                    
+                    <h4>Invoice Details:</h4>
+                    <ul>
+                        <li><strong>Invoice Number:</strong> {invoice_data.get('invoice_number')}</li>
+                        <li><strong>Amount Due:</strong> ${invoice_data.get('amount', 0):.2f}</li>
+                        <li><strong>Due Date:</strong> {invoice_data.get('due_date')}</li>
+                    </ul>
+                    
+                    <p>You can pay your invoice online using our secure payment portal:</p>
+                    <p><a href="{invoice_data.get('payment_link', '#')}" style="background-color: #28a745; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Pay Now</a></p>
+                    
+                    <p>If you have any questions about this invoice or need to discuss payment arrangements, please contact us immediately.</p>
+                    
+                    <p>Thank you for your business!</p>
+                    
+                    <p>Best regards,<br/>
+                    StoneCraft Billing Department<br/>
+                    (555) 123-4567</p>
+                </body>
+            </html>
+            """
+            
+            await self._send_email(
+                to_email=to_email,
+                subject=subject,
+                html_body=html_body
+            )
+            
+            logger.info(f"Payment reminder ({reminder_type}) sent to {to_email}")
+        
+        except Exception as e:
+            logger.error(f"Error sending payment reminder: {e}")
+            raise
+
     async def _send_email(
         self,
         to_email: str,
         subject: str,
-        text_body: Optional[str] = None,
-        html_body: Optional[str] = None
-    ):
-        """Send basic email"""
-        msg = MIMEMultipart('alternative')
-        msg['Subject'] = subject
-        msg['From'] = self.smtp_username
-        msg['To'] = to_email
-        
-        if text_body:
-            msg.attach(MIMEText(text_body, 'plain'))
-        
-        if html_body:
-            msg.attach(MIMEText(html_body, 'html'))
-        
-        # Send email
-        with smtplib.SMTP(self.smtp_host, self.smtp_port) as server:
-            server.starttls()
-            server.login(self.smtp_username, self.smtp_password)
-            server.send_message(msg)
-
-    async def _send_email_with_attachment(
-        self,
-        to_email: str,
-        subject: str,
         html_body: str,
-        attachment_url: Optional[str] = None,
-        attachment_name: str = "attachment.pdf"
+        attachments: list = None
     ):
-        """Send email with PDF attachment from URL"""
-        msg = MIMEMultipart()
-        msg['Subject'] = subject
-        msg['From'] = self.smtp_username
-        msg['To'] = to_email
-        
-        # Add HTML body
-        msg.attach(MIMEText(html_body, 'html'))
-        
-        # Add attachment if URL provided
-        if attachment_url:
-            try:
-                # Download file from URL
-                response = requests.get(attachment_url)
-                response.raise_for_status()
-                
-                # Create attachment
-                part = MIMEBase('application', 'octet-stream')
-                part.set_payload(response.content)
-                encoders.encode_base64(part)
-                part.add_header(
-                    'Content-Disposition',
-                    f'attachment; filename= {attachment_name}'
-                )
-                msg.attach(part)
+        """Send email using SMTP"""
+        try:
+            msg = MIMEMultipart('alternative')
+            msg['Subject'] = subject
+            msg['From'] = self.smtp_username
+            msg['To'] = to_email
             
-            except Exception as e:
-                logger.warning(f"Could not attach file: {e}")
+            # Add HTML content
+            html_part = MIMEText(html_body, 'html')
+            msg.attach(html_part)
+            
+            # Add attachments if provided
+            if attachments:
+                for attachment in attachments:
+                    msg.attach(attachment)
+            
+            # Send email
+            with smtplib.SMTP(self.smtp_host, self.smtp_port) as server:
+                server.starttls()
+                server.login(self.smtp_username, self.smtp_password)
+                server.send_message(msg)
+            
+            logger.info(f"Email sent successfully to {to_email}")
         
-        # Send email
-        with smtplib.SMTP(self.smtp_host, self.smtp_port) as server:
-            server.starttls()
-            server.login(self.smtp_username, self.smtp_password)
-            server.send_message(msg)
-
-    async def send_welcome_email(self, to_email: str, user_name: str):
-        """Send welcome email to new users"""
-        subject = "Welcome to Our CRM System!"
-        
-        html_body = f"""
-        <html>
-            <head></head>
-            <body>
-                <h2>Welcome {user_name}!</h2>
-                
-                <p>Thank you for joining our CRM and Estimating platform. You can now:</p>
-                
-                <ul>
-                    <li>Manage vendor relationships</li>
-                    <li>Create professional estimates</li>
-                    <li>Generate contracts</li>
-                    <li>Process payments</li>
-                    <li>Upload and parse PDF documents</li>
-                </ul>
-                
-                <p>If you need any assistance getting started, please don't hesitate to contact our support team.</p>
-                
-                <p>Best regards,<br/>
-                The CRM Team</p>
-            </body>
-        </html>
-        """
-        
-        await self._send_email(to_email, subject, html_body=html_body)
+        except Exception as e:
+            logger.error(f"Failed to send email to {to_email}: {e}")
+            raise
