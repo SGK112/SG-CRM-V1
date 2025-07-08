@@ -230,4 +230,19 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+
+# Large output files
 output.txt
+*.log
+server_monitor.log
+
+# Analysis and temporary files
+repo_analysis.json
+repo_summary.json
+*.bak
+*.backup
+*.old
+*~
+
+# Duplicate or legacy files
+playground-*.mongodb.js
