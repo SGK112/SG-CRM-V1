@@ -46,30 +46,50 @@ const theme = createTheme({
     text: {
       primary: brandColors.text.primary,
       secondary: brandColors.text.secondary,
+      disabled: brandColors.text.light,
     },
     action: {
       selected: '#e8f4fd',
+      hover: 'rgba(0, 0, 0, 0.04)',
+      disabled: 'rgba(0, 0, 0, 0.26)',
     },
     info: {
       main: brandColors.accent,
       light: '#7db3f0',
       dark: '#2c5aa0',
+      contrastText: brandColors.white,
     },
     success: {
       main: '#4caf50',
       light: '#81c784',
       dark: '#388e3c',
+      contrastText: brandColors.white,
     },
     warning: {
       main: '#ff9800',
       light: '#ffb74d',
       dark: '#f57c00',
+      contrastText: brandColors.white,
     },
     error: {
       main: '#f44336',
       light: '#e57373',
       dark: '#d32f2f',
+      contrastText: brandColors.white,
     },
+    grey: {
+      50: '#fafafa',
+      100: '#f5f5f5',
+      200: '#eeeeee',
+      300: '#e0e0e0',
+      400: '#bdbdbd',
+      500: '#9e9e9e',
+      600: '#757575',
+      700: '#616161',
+      800: '#424242',
+      900: '#212121',
+    },
+    divider: 'rgba(0, 0, 0, 0.12)',
   },
   typography: {
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
@@ -264,32 +284,38 @@ const theme = createTheme({
         },
       },
     },
-    // Mobile-first chip styling
+    // Ensure good contrast for Chip components
     MuiChip: {
       styleOverrides: {
         root: {
-          borderRadius: 16,
-          fontSize: '0.75rem',
-          height: 28,
-          '@media (min-width:600px)': {
-            fontSize: '0.875rem',
-            height: 32,
+          backgroundColor: '#f0f0f0',
+          color: brandColors.text.primary,
+          '&:hover': {
+            backgroundColor: '#e0e0e0',
           },
         },
         colorPrimary: {
-          backgroundColor: brandColors.accent,
+          backgroundColor: brandColors.primary,
           color: brandColors.white,
+          '&:hover': {
+            backgroundColor: '#1a1a1a',
+          },
         },
         colorSecondary: {
           backgroundColor: brandColors.secondary,
           color: brandColors.white,
+          '&:hover': {
+            backgroundColor: '#8a6b4f',
+          },
         },
       },
     },
-    // Mobile-first paper styling
+    // Mobile-first paper styling with proper contrast
     MuiPaper: {
       styleOverrides: {
         root: {
+          backgroundColor: brandColors.white,
+          color: brandColors.text.primary,
           borderRadius: 12,
           boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
         },

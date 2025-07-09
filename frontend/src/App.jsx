@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Box, useMediaQuery, Typography, ThemeProvider } from '@mui/material';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
-import mobileFirstTheme, { mobileStyles } from './theme/mobileFirstTheme';
+import mobileFirstTheme from './theme/mobileFirstTheme';
 import './mobile-first.css';
 import Navbar from './components/Layout/Navbar';
 import Sidebar from './components/Layout/Sidebar';
@@ -41,7 +41,11 @@ const AppLayout = ({ children }) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        ...mobileStyles.mobileContainer
+        // Safe area support
+        paddingTop: 'env(safe-area-inset-top)',
+        paddingBottom: 'env(safe-area-inset-bottom)',
+        paddingLeft: 'env(safe-area-inset-left)',
+        paddingRight: 'env(safe-area-inset-right)',
       }}>
         {children}
       </Box>
@@ -53,23 +57,21 @@ const AppLayout = ({ children }) => {
       <Box sx={{ 
         display: 'flex',
         flexDirection: 'column',
-        minHeight: '100vh',
+        height: '100vh',
         backgroundColor: 'background.default'
       }}>
         <MobileNavigation />
-        <Box component="main" sx={{ 
-          flexGrow: 1,
-          pt: 7, // Space for fixed mobile header
-          pb: 8, // Space for bottom navigation
-          px: 2,
-          backgroundColor: 'background.default',
-          minHeight: 'calc(100vh - 120px)',
-          // Safe area insets for mobile devices
-          paddingTop: 'calc(56px + env(safe-area-inset-top))',
-          paddingBottom: 'calc(64px + env(safe-area-inset-bottom))',
-          paddingLeft: 'calc(1rem + env(safe-area-inset-left))',
-          paddingRight: 'calc(1rem + env(safe-area-inset-right))'
-        }}>
+        <Box 
+          component="main" 
+          sx={{ 
+            flex: 1,
+            marginTop: '56px', // Header height
+            marginBottom: '64px', // Bottom nav height
+            padding: 2,
+            overflow: 'auto',
+            backgroundColor: 'background.default',
+          }}
+        >
           {children}
         </Box>
       </Box>
@@ -80,20 +82,22 @@ const AppLayout = ({ children }) => {
   return (
     <Box sx={{ 
       display: 'flex', 
-      minHeight: '100vh',
+      height: '100vh',
       backgroundColor: 'background.default'
     }}>
       <Sidebar />
-      <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <Navbar />
-        <Box component="main" sx={{ 
-          flexGrow: 1, 
-          p: 3,
-          mt: 8,
-          maxWidth: '100%',
-          overflow: 'auto',
-          backgroundColor: 'background.default'
-        }}>
+        <Box 
+          component="main" 
+          sx={{ 
+            flex: 1,
+            marginTop: '64px', // Navbar height
+            padding: { xs: 2, sm: 3, md: 4 },
+            overflow: 'auto',
+            backgroundColor: 'background.default',
+          }}
+        >
           {children}
         </Box>
       </Box>
@@ -125,11 +129,51 @@ function AuthenticatedApp() {
         minHeight: '100vh',
         background: `linear-gradient(135deg, ${mobileFirstTheme.palette.primary.main} 0%, ${mobileFirstTheme.palette.secondary.main} 100%)`,
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        ...mobileStyles.mobileContainer
+        gap: 3,
+        // Safe area support
+        paddingTop: 'env(safe-area-inset-top)',
+        paddingBottom: 'env(safe-area-inset-bottom)',
+        paddingLeft: 'env(safe-area-inset-left)',
+        paddingRight: 'env(safe-area-inset-right)',
       }}>
-        <Typography variant="h6" color="white">Loading...</Typography>
+        <Box
+          sx={{
+            width: 60,
+            height: 60,
+            borderRadius: '50%',
+            background: `conic-gradient(${mobileFirstTheme.palette.secondary.main}, transparent, ${mobileFirstTheme.palette.secondary.main})`,
+            animation: 'spin 1s linear infinite',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            '@keyframes spin': {
+              '0%': { transform: 'rotate(0deg)' },
+              '100%': { transform: 'rotate(360deg)' }
+            }
+          }}
+        >
+          <Box
+            sx={{
+              width: 40,
+              height: 40,
+              borderRadius: '50%',
+              backgroundColor: mobileFirstTheme.palette.primary.main,
+            }}
+          />
+        </Box>
+        <Typography 
+          variant="h6" 
+          sx={{ 
+            color: mobileFirstTheme.palette.primary.contrastText,
+            fontWeight: 600,
+            letterSpacing: '0.05em'
+          }}
+        >
+          Loading SG CRM...
+        </Typography>
       </Box>
     );
   }
@@ -249,16 +293,47 @@ function AuthenticatedApp() {
             <Route path="/admin/feedback" element={<Navigate to="/admin/settings" replace />} />
             <Route path="/admin/bug-reports" element={<Navigate to="/admin/settings" replace />} />
             <Route path="/files" element={<Navigate to="/services" replace />} />
-            <Route path="/" element={<RootRedirect />} />        </Routes>
+            <Route path="/" element={<RootRedirect />} />
+        </Routes>
       <CRMCopilot />
       <Toaster 
         position="top-center"
         toastOptions={{
           duration: 4000,
           style: {
-            background: mobileFirstTheme.palette.primary.main,
-            color: mobileFirstTheme.palette.primary.contrastText,
-            marginTop: '60px', // Account for mobile header
+            background: mobileFirstTheme.palette.background.paper,
+            color: mobileFirstTheme.palette.text.primary,
+            border: `1px solid ${mobileFirstTheme.palette.divider}`,
+            borderRadius: '12px',
+            fontSize: '0.875rem',
+            fontWeight: 500,
+            boxShadow: `0 8px 32px ${mobileFirstTheme.palette.primary.main}20`,
+            backdropFilter: 'blur(8px)',
+            marginTop: '80px', // Account for mobile header and safe area
+            padding: '12px 16px',
+            maxWidth: '90vw',
+          },
+          success: {
+            style: {
+              background: `linear-gradient(135deg, ${mobileFirstTheme.palette.primary.main}10 0%, ${mobileFirstTheme.palette.secondary.main}10 100%)`,
+              border: `1px solid ${mobileFirstTheme.palette.secondary.main}40`,
+              color: mobileFirstTheme.palette.text.primary,
+            },
+            iconTheme: {
+              primary: mobileFirstTheme.palette.secondary.main,
+              secondary: mobileFirstTheme.palette.secondary.contrastText,
+            },
+          },
+          error: {
+            style: {
+              background: `linear-gradient(135deg, #f4433610 0%, #ff000010 100%)`,
+              border: `1px solid #f4433640`,
+              color: mobileFirstTheme.palette.text.primary,
+            },
+            iconTheme: {
+              primary: '#f44336',
+              secondary: '#ffffff',
+            },
           },
         }}
       />

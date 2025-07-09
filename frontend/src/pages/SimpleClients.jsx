@@ -388,7 +388,7 @@ Created: ${new Date(client.createdAt).toLocaleDateString()}
                   </Typography>
                   
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                    <EmailIcon sx={{ fontSize: 16, mr: 1, color: '#3498db' }} />
+                    <EmailIcon sx={{ fontSize: 16, mr: 1, color: 'info.main' }} />
                     <Typography variant="body2" sx={{ color: '#666' }}>
                       {client.email}
                     </Typography>
@@ -422,7 +422,7 @@ Created: ${new Date(client.createdAt).toLocaleDateString()}
                     <Box sx={{ 
                       mt: 2, 
                       p: 1, 
-                      backgroundColor: '#3498db', 
+                      backgroundColor: 'info.main', 
                       color: 'white', 
                       borderRadius: 1, 
                       textAlign: 'center' 

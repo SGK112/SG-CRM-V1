@@ -8,26 +8,19 @@ import {
   Avatar,
   List,
   ListItem,
-  ListItemText,
-  ListItemAvatar,
   Chip,
   Button,
   Card,
-  CardContent,
   Grid,
   Tooltip,
   Fade,
-  Slide,
-  Divider,
   Badge,
   CircularProgress,
+  useTheme,
+  useMediaQuery,
 } from '@mui/material';
 import {
-  Chat as ChatIcon,
   Send as SendIcon,
-  Support as SupportIcon,
-  SmartToy as BotIcon,
-  Person as PersonIcon,
   Close as CloseIcon,
   Minimize as MinimizeIcon,
   OpenInFull as ExpandIcon,
@@ -36,12 +29,11 @@ import {
   Help as HelpIcon,
   Settings as SettingsIcon,
   Psychology as AIIcon,
-  Star as StarIcon,
-  ThumbUp as ThumbUpIcon,
-  ThumbDown as ThumbDownIcon,
 } from '@mui/icons-material';
 
 const CRMCopilot = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [isOpen, setIsOpen] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [messages, setMessages] = useState([
@@ -215,38 +207,39 @@ Could you be more specific about what you'd like help with?`;
 
   const CopilotFab = () => (
     <Tooltip title="CRM Assistant" placement="left">
-      <Box
+      <IconButton
+        onClick={() => setIsOpen(true)}
         sx={{
-          position: 'fixed',
-          bottom: 24,
+          position: 'relative',
+          bottom: isMobile ? 80 : 24,
           right: 24,
-          zIndex: 1300,
+          width: 56,
+          height: 56,
+          backgroundColor: theme.palette.secondary.main,
+          color: 'white',
+          boxShadow: '0 4px 20px rgba(139, 69, 19, 0.3)',
+          '&:hover': {
+            backgroundColor: theme.palette.secondary.dark,
+            transform: 'scale(1.05)',
+          },
+          transition: 'all 0.3s ease',
         }}
       >
         <Badge
           badgeContent={messages.filter(m => m.type === 'bot' && !m.read).length}
           color="error"
           max={9}
+          sx={{
+            '& .MuiBadge-badge': {
+              fontSize: '0.75rem',
+              height: 20,
+              minWidth: 20,
+            }
+          }}
         >
-          <IconButton
-            onClick={() => setIsOpen(true)}
-            sx={{
-              width: 60,
-              height: 60,
-              backgroundColor: '#8B4513',
-              color: 'white',
-              boxShadow: '0 4px 20px rgba(139, 69, 19, 0.3)',
-              '&:hover': {
-                backgroundColor: '#D4A574',
-                transform: 'scale(1.1)',
-              },
-              transition: 'all 0.3s ease',
-            }}
-          >
-            <AIIcon sx={{ fontSize: 28 }} />
-          </IconButton>
+          <AIIcon sx={{ fontSize: 28 }} />
         </Badge>
-      </Box>
+      </IconButton>
     </Tooltip>
   );
 
@@ -254,25 +247,25 @@ Could you be more specific about what you'd like help with?`;
     <Fade in={isOpen}>
       <Paper
         sx={{
-          position: 'fixed',
-          bottom: isMinimized ? -400 : 100,
+          position: 'relative',
+          bottom: isMobile ? 150 : 100,
           right: 24,
-          width: { xs: 'calc(100vw - 48px)', sm: 400 },
-          height: { xs: 'calc(100vh - 148px)', sm: 500 },
-          zIndex: 1300,
+          width: isMobile ? 'calc(100vw - 48px)' : 380,
+          height: isMobile ? 'calc(100vh - 250px)' : 480,
           display: 'flex',
           flexDirection: 'column',
-          borderRadius: 3,
+          borderRadius: 2,
           overflow: 'hidden',
           boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
           transition: 'all 0.3s ease',
+          transform: isMinimized ? 'translateY(100%)' : 'translateY(0)',
         }}
       >
         {/* Header */}
         <Box
           sx={{
             p: 2,
-            backgroundColor: '#8B4513',
+            background: `linear-gradient(135deg, ${theme.palette.secondary.main} 0%, ${theme.palette.secondary.dark} 100%)`,
             color: 'white',
             display: 'flex',
             alignItems: 'center',
@@ -280,8 +273,8 @@ Could you be more specific about what you'd like help with?`;
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Avatar sx={{ width: 32, height: 32, backgroundColor: '#D4A574' }}>
-              <AIIcon />
+            <Avatar sx={{ width: 32, height: 32, backgroundColor: 'rgba(255,255,255,0.2)' }}>
+              <AIIcon sx={{ color: 'white' }} />
             </Avatar>
             <Box>
               <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
@@ -354,11 +347,13 @@ Could you be more specific about what you'd like help with?`;
                     <Box
                       sx={{
                         maxWidth: '85%',
-                        backgroundColor: message.type === 'user' ? '#8B4513' : '#f5f5f5',
-                        color: message.type === 'user' ? 'white' : 'text.primary',
+                        backgroundColor: message.type === 'user' ? theme.palette.secondary.main : theme.palette.background.paper,
+                        color: message.type === 'user' ? 'white' : theme.palette.text.primary,
                         borderRadius: 2,
                         p: 2,
                         mb: 1,
+                        border: message.type === 'bot' ? `1px solid ${theme.palette.divider}` : 'none',
+                        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
                       }}
                     >
                       <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap' }}>
@@ -374,9 +369,13 @@ Could you be more specific about what you'd like help with?`;
                               size="small"
                               onClick={() => handleSuggestionClick(suggestion)}
                               sx={{
-                                backgroundColor: 'rgba(255,255,255,0.1)',
-                                color: message.type === 'user' ? 'white' : '#8B4513',
-                                '&:hover': { backgroundColor: 'rgba(255,255,255,0.2)' },
+                                backgroundColor: message.type === 'user' ? 'rgba(255,255,255,0.2)' : theme.palette.secondary.light,
+                                color: message.type === 'user' ? 'white' : theme.palette.secondary.main,
+                                '&:hover': { 
+                                  backgroundColor: message.type === 'user' ? 'rgba(255,255,255,0.3)' : theme.palette.secondary.main,
+                                  color: message.type === 'user' ? 'white' : 'white',
+                                },
+                                border: message.type === 'user' ? '1px solid rgba(255,255,255,0.3)' : `1px solid ${theme.palette.secondary.main}`,
                               }}
                             />
                           ))}
@@ -391,10 +390,11 @@ Could you be more specific about what you'd like help with?`;
                               size="small"
                               variant="outlined"
                               sx={{
-                                borderColor: message.type === 'user' ? 'white' : '#8B4513',
-                                color: message.type === 'user' ? 'white' : '#8B4513',
+                                borderColor: message.type === 'user' ? 'white' : theme.palette.secondary.main,
+                                color: message.type === 'user' ? 'white' : theme.palette.secondary.main,
                                 '&:hover': {
-                                  backgroundColor: 'rgba(255,255,255,0.1)',
+                                  backgroundColor: message.type === 'user' ? 'rgba(255,255,255,0.1)' : theme.palette.secondary.main,
+                                  color: message.type === 'user' ? 'white' : 'white',
                                 },
                               }}
                             >
@@ -447,8 +447,8 @@ Could you be more specific about what you'd like help with?`;
                   sx={{
                     '& .MuiOutlinedInput-root': {
                       borderRadius: 2,
-                      '&:hover fieldset': { borderColor: '#8B4513' },
-                      '&.Mui-focused fieldset': { borderColor: '#8B4513' },
+                      '&:hover fieldset': { borderColor: theme.palette.secondary.main },
+                      '&.Mui-focused fieldset': { borderColor: theme.palette.secondary.main },
                     },
                   }}
                 />
@@ -456,10 +456,10 @@ Could you be more specific about what you'd like help with?`;
                   onClick={handleSendMessage}
                   disabled={!inputValue.trim()}
                   sx={{
-                    backgroundColor: '#8B4513',
+                    backgroundColor: theme.palette.secondary.main,
                     color: 'white',
-                    '&:hover': { backgroundColor: '#D4A574' },
-                    '&:disabled': { backgroundColor: '#e0e0e0' },
+                    '&:hover': { backgroundColor: theme.palette.secondary.dark },
+                    '&:disabled': { backgroundColor: theme.palette.grey[300], color: theme.palette.grey[500] },
                   }}
                 >
                   <SendIcon />
@@ -473,10 +473,10 @@ Could you be more specific about what you'd like help with?`;
   );
 
   return (
-    <>
+    <Box sx={{ position: 'fixed', bottom: 0, right: 0, zIndex: 9999 }}>
       {!isOpen && <CopilotFab />}
       {isOpen && <CopilotWindow />}
-    </>
+    </Box>
   );
 };
 

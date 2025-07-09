@@ -280,9 +280,12 @@ const EnhancedDashboard = () => {
                 onClick={handleAddClient}
                 sx={{ 
                   py: 1.5,
+                  borderColor: 'primary.main',
+                  color: 'primary.main',
                   '&:hover': {
-                    backgroundColor: 'primary.light',
-                    color: 'white'
+                    backgroundColor: 'primary.main',
+                    color: 'white',
+                    borderColor: 'primary.main'
                   }
                 }}
               >
@@ -297,9 +300,12 @@ const EnhancedDashboard = () => {
                 onClick={handleNewEstimate}
                 sx={{ 
                   py: 1.5,
+                  borderColor: 'success.main',
+                  color: 'success.main',
                   '&:hover': {
-                    backgroundColor: 'success.light',
-                    color: 'white'
+                    backgroundColor: 'success.main',
+                    color: 'white',
+                    borderColor: 'success.main'
                   }
                 }}
               >
@@ -314,9 +320,12 @@ const EnhancedDashboard = () => {
                 onClick={handleScheduleAppointment}
                 sx={{ 
                   py: 1.5,
+                  borderColor: 'info.main',
+                  color: 'info.main',
                   '&:hover': {
-                    backgroundColor: 'info.light',
-                    color: 'white'
+                    backgroundColor: 'info.main',
+                    color: 'white',
+                    borderColor: 'info.main'
                   }
                 }}
               >
@@ -331,9 +340,12 @@ const EnhancedDashboard = () => {
                 onClick={handleNewContract}
                 sx={{ 
                   py: 1.5,
+                  borderColor: 'warning.main',
+                  color: 'warning.main',
                   '&:hover': {
-                    backgroundColor: 'warning.light',
-                    color: 'white'
+                    backgroundColor: 'warning.main',
+                    color: 'white',
+                    borderColor: 'warning.main'
                   }
                 }}
               >
@@ -348,9 +360,12 @@ const EnhancedDashboard = () => {
                 onClick={handleViewReports}
                 sx={{ 
                   py: 1.5,
+                  borderColor: 'secondary.main',
+                  color: 'secondary.main',
                   '&:hover': {
-                    backgroundColor: 'secondary.light',
-                    color: 'white'
+                    backgroundColor: 'secondary.main',
+                    color: 'white',
+                    borderColor: 'secondary.main'
                   }
                 }}
               >
@@ -365,9 +380,12 @@ const EnhancedDashboard = () => {
                 onClick={handleMarketingCampaign}
                 sx={{ 
                   py: 1.5,
+                  borderColor: 'error.main',
+                  color: 'error.main',
                   '&:hover': {
-                    backgroundColor: 'error.light',
-                    color: 'white'
+                    backgroundColor: 'error.main',
+                    color: 'white',
+                    borderColor: 'error.main'
                   }
                 }}
               >
@@ -382,9 +400,12 @@ const EnhancedDashboard = () => {
                 onClick={handleAccessForms}
                 sx={{ 
                   py: 1.5,
+                  borderColor: '#9c27b0',
+                  color: '#9c27b0',
                   '&:hover': {
-                    backgroundColor: 'purple',
-                    color: 'white'
+                    backgroundColor: '#9c27b0',
+                    color: 'white',
+                    borderColor: '#9c27b0'
                   }
                 }}
               >
