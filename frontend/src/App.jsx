@@ -21,7 +21,7 @@ import MarketingDashboard from './pages/MarketingDashboard';
 import EnhancedSettings from './pages/Admin/EnhancedSettings';
 import Inbox from './pages/Inbox';
 import Forms from './pages/Forms';
-import CRMCopilot from './components/CRMCopilot';
+import AIAssistant from './components/AIAssistant';
 import { Toaster } from 'react-hot-toast';
 
 const ProtectedRoute = ({ children }) => {
@@ -295,7 +295,7 @@ function AuthenticatedApp() {
             <Route path="/files" element={<Navigate to="/services" replace />} />
             <Route path="/" element={<RootRedirect />} />
         </Routes>
-      <CRMCopilot />
+      <AIAssistant />
       <Toaster 
         position="top-center"
         toastOptions={{
