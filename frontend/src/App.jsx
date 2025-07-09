@@ -2,10 +2,11 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { Box, useMediaQuery, Typography, ThemeProvider } from '@mui/material';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
-import mobileFirstTheme, { mobileStyles, mobileBreakpoints } from './theme/mobileFirstTheme';
+import mobileFirstTheme, { mobileStyles } from './theme/mobileFirstTheme';
 import './mobile-first.css';
 import Navbar from './components/Layout/Navbar';
 import Sidebar from './components/Layout/Sidebar';
+import MobileNavigation from './components/MobileNavigation';
 import Login from './pages/Login';
 import EnhancedDashboard from './pages/EnhancedDashboard';
 import SimpleClients from './pages/SimpleClients';
@@ -20,7 +21,6 @@ import MarketingDashboard from './pages/MarketingDashboard';
 import EnhancedSettings from './pages/Admin/EnhancedSettings';
 import Inbox from './pages/Inbox';
 import Forms from './pages/Forms';
-import LeadCaptureForm from './components/LeadCaptureForm';
 import CRMCopilot from './components/CRMCopilot';
 import { Toaster } from 'react-hot-toast';
 
@@ -37,7 +37,7 @@ const AppLayout = ({ children }) => {
     return (
       <Box sx={{ 
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #4A90E2 0%, #B89778 100%)',
+        background: `linear-gradient(135deg, ${mobileFirstTheme.palette.primary.main} 0%, ${mobileFirstTheme.palette.secondary.main} 100%)`,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -48,29 +48,51 @@ const AppLayout = ({ children }) => {
     );
   }
 
+  if (isMobile) {
+    return (
+      <Box sx={{ 
+        display: 'flex',
+        flexDirection: 'column',
+        minHeight: '100vh',
+        backgroundColor: 'background.default'
+      }}>
+        <MobileNavigation />
+        <Box component="main" sx={{ 
+          flexGrow: 1,
+          pt: 7, // Space for fixed mobile header
+          pb: 8, // Space for bottom navigation
+          px: 2,
+          backgroundColor: 'background.default',
+          minHeight: 'calc(100vh - 120px)',
+          // Safe area insets for mobile devices
+          paddingTop: 'calc(56px + env(safe-area-inset-top))',
+          paddingBottom: 'calc(64px + env(safe-area-inset-bottom))',
+          paddingLeft: 'calc(1rem + env(safe-area-inset-left))',
+          paddingRight: 'calc(1rem + env(safe-area-inset-right))'
+        }}>
+          {children}
+        </Box>
+      </Box>
+    );
+  }
+
+  // Desktop layout
   return (
     <Box sx={{ 
       display: 'flex', 
       minHeight: '100vh',
-      backgroundColor: '#F5F5F5'
+      backgroundColor: 'background.default'
     }}>
-      {!isMobile && <Sidebar />}
+      <Sidebar />
       <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         <Navbar />
         <Box component="main" sx={{ 
           flexGrow: 1, 
-          p: { xs: 1, sm: 2, md: 3 }, 
-          mt: { xs: 7, sm: 8 },
-          mb: { xs: 10, md: 0 }, // Add bottom margin for mobile navigation
+          p: 3,
+          mt: 8,
           maxWidth: '100%',
           overflow: 'auto',
-          backgroundColor: '#f8fafc',
-          minHeight: `calc(100vh - ${isMobile ? 150 : 64}px)`, // Account for mobile bottom nav
-          // Safe area padding for mobile devices
-          paddingTop: { xs: 'calc(1rem + env(safe-area-inset-top))', sm: '1rem' },
-          paddingBottom: { xs: 'calc(1rem + env(safe-area-inset-bottom))', sm: '1rem' },
-          paddingLeft: { xs: 'calc(1rem + env(safe-area-inset-left))', sm: '1rem' },
-          paddingRight: { xs: 'calc(1rem + env(safe-area-inset-right))', sm: '1rem' }
+          backgroundColor: 'background.default'
         }}>
           {children}
         </Box>
@@ -101,10 +123,11 @@ function AuthenticatedApp() {
     return (
       <Box sx={{ 
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        background: `linear-gradient(135deg, ${mobileFirstTheme.palette.primary.main} 0%, ${mobileFirstTheme.palette.secondary.main} 100%)`,
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        ...mobileStyles.mobileContainer
       }}>
         <Typography variant="h6" color="white">Loading...</Typography>
       </Box>
@@ -229,12 +252,13 @@ function AuthenticatedApp() {
             <Route path="/" element={<RootRedirect />} />        </Routes>
       <CRMCopilot />
       <Toaster 
-        position="top-right"
+        position="top-center"
         toastOptions={{
           duration: 4000,
           style: {
-            background: '#363636',
-            color: '#fff',
+            background: mobileFirstTheme.palette.primary.main,
+            color: mobileFirstTheme.palette.primary.contrastText,
+            marginTop: '60px', // Account for mobile header
           },
         }}
       />

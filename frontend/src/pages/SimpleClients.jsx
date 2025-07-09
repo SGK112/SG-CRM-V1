@@ -18,7 +18,8 @@ import {
   FormControl,
   InputLabel,
   Select,
-  styled
+  styled,
+  useTheme
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -33,32 +34,33 @@ const StyledCard = styled(Card)(({ theme }) => ({
   height: '100%',
   cursor: 'pointer',
   transition: 'all 0.2s ease',
-  border: '2px solid #e0e0e0',
+  border: `2px solid ${theme.palette.divider}`,
   '&:hover': {
     transform: 'translateY(-2px)',
     boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
-    borderColor: '#3498db'
+    borderColor: theme.palette.primary.main
   }
 }));
 
 const FileUploadArea = styled(Box)(({ theme }) => ({
-  border: '2px dashed #bdc3c7',
+  border: `2px dashed ${theme.palette.divider}`,
   borderRadius: 8,
   padding: 40,
   textAlign: 'center',
   cursor: 'pointer',
   transition: 'all 0.3s ease',
   '&:hover': {
-    borderColor: '#3498db',
-    backgroundColor: '#f8f9fa'
+    borderColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.background.default
   },
   '&.dragover': {
-    borderColor: '#27ae60',
-    backgroundColor: '#e8f5e8'
+    borderColor: theme.palette.secondary.main,
+    backgroundColor: theme.palette.background.paper
   }
 }));
 
 const SimpleClients = () => {
+  const theme = useTheme();
   const [clients, setClients] = useState([]);
   const [addDialogOpen, setAddDialogOpen] = useState(false);
   const [bulkUploadOpen, setBulkUploadOpen] = useState(false);
@@ -287,7 +289,12 @@ Created: ${new Date(client.createdAt).toLocaleDateString()}
   return (
     <Box sx={{ p: 3 }}>
       {/* Header */}
-      <Paper sx={{ mb: 3, p: 3, background: 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)', color: 'white' }}>
+      <Paper sx={{ 
+        mb: 3, 
+        p: 3, 
+        background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`, 
+        color: theme.palette.primary.contrastText 
+      }}>
         <Typography variant="h4" sx={{ mb: 1, fontWeight: 600 }}>
           📋 Client Management
         </Typography>
@@ -299,10 +306,10 @@ Created: ${new Date(client.createdAt).toLocaleDateString()}
         <Grid container spacing={2}>
           <Grid item xs={12} sm={4}>
             <Paper sx={{ p: 2, textAlign: 'center', background: 'rgba(255,255,255,0.15)' }}>
-              <Typography variant="h4" sx={{ fontWeight: 700, color: 'white' }}>
+              <Typography variant="h4" sx={{ fontWeight: 700, color: theme.palette.primary.contrastText }}>
                 {stats.total}
               </Typography>
-              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+              <Typography variant="caption" sx={{ color: theme.palette.primary.contrastText, opacity: 0.8 }}>
                 Total Clients
               </Typography>
             </Paper>
@@ -312,7 +319,7 @@ Created: ${new Date(client.createdAt).toLocaleDateString()}
               <Typography variant="h4" sx={{ fontWeight: 700, color: 'white' }}>
                 ${stats.totalRevenue.toLocaleString()}
               </Typography>
-              <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.8)' }}>
+              <Typography variant="caption" sx={{ color: theme.palette.primary.contrastText, opacity: 0.8 }}>
                 Pipeline Value
               </Typography>
             </Paper>
@@ -336,7 +343,7 @@ Created: ${new Date(client.createdAt).toLocaleDateString()}
           variant="contained"
           startIcon={<AddIcon />}
           onClick={() => setAddDialogOpen(true)}
-          sx={{ backgroundColor: '#3498db' }}
+          color="primary"
         >
           Add New Client
         </Button>
@@ -344,7 +351,7 @@ Created: ${new Date(client.createdAt).toLocaleDateString()}
           variant="contained"
           startIcon={<UploadIcon />}
           onClick={() => setBulkUploadOpen(true)}
-          sx={{ backgroundColor: '#27ae60' }}
+          color="secondary"
         >
           Bulk Upload CSV
         </Button>

@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SG-CRM Mobile-First Design Demo</title>
+    <style>
+        /* Brand Colors */
+        :root {
+            --primary-color: #333333;
+            --secondary-color: #B89778;
+            --background-color: #F5F5F5;
+            --accent-color: #4A90E2;
+            --white: #FFFFFF;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-light: #999999;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+            color: var(--white);
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .color-card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .color-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .color-swatch {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .color-info {
+            padding: 20px;
+        }
+
+        .color-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .color-info p {
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .color-code {
+            font-family: 'Courier New', monospace;
+            background: var(--background-color);
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        .components-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .component-demo {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .component-demo h4 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        /* Button Styles */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 5px;
+            min-height: 44px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent-color) 0%, #357ABD 100%);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #357ABD 0%, var(--accent-color) 100%);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, #A08569 100%);
+            color: var(--white);
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #A08569 0%, var(--secondary-color) 100%);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--accent-color);
+            color: var(--white);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid rgba(184, 151, 120, 0.3);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+            min-height: 44px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: var(--white);
+            padding: 20px;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        /* Status Indicators */
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-active {
+            background: #4CAF50;
+            color: var(--white);
+        }
+
+        .status-pending {
+            background: #FF9800;
+            color: var(--white);
+        }
+
+        .status-inactive {
+            background: #F44336;
+            color: var(--white);
+        }
+
+        /* Mobile First Responsive Design */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .container {
+                padding: 10px;
+            }
+            
+            .color-palette {
+                grid-template-columns: 1fr;
+            }
+            
+            .component-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .component-demo {
+                padding: 20px;
+            }
+        }
+
+        /* Navigation Demo */
+        .mobile-nav-demo {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border-top: 1px solid rgba(184, 151, 120, 0.3);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            padding: 8px;
+            transition: color 0.2s ease;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            color: var(--accent-color);
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+            fill: currentColor;
+        }
+
+        /* Usage Examples */
+        .usage-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .usage-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-color);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .usage-card h5 {
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .usage-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--primary-color);
+            color: var(--white);
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+
+        .footer h3 {
+            margin-bottom: 20px;
+        }
+
+        .footer p {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <h1>SG-CRM Mobile-First Design System</h1>
+        <p>Optimized for stone & granite countertop businesses with our brand colors</p>
+        <button class="btn btn-primary">Get Started</button>
+        <button class="btn btn-outline">Learn More</button>
+    </div>
+
+    <div class="container">
+        <h2 class="section-title">Brand Color Palette</h2>
+        <div class="color-palette">
+            <div class="color-card">
+                <div class="color-swatch" style="background-color: #333333;">
+                    Primary
+                </div>
+                <div class="color-info">
+                    <h3>Primary Color</h3>
+                    <p>Used for headers, main text, and primary elements</p>
+                    <div class="color-code">#333333</div>
+                </div>
+            </div>
+
+            <div class="color-card">
+                <div class="color-swatch" style="background-color: #B89778;">
+                    Secondary
+                </div>
+                <div class="color-info">
+                    <h3>Secondary Color</h3>
+                    <p>Warm brown/tan for accents and highlights</p>
+                    <div class="color-code">#B89778</div>
+                </div>
+            </div>
+
+            <div class="color-card">
+                <div class="color-swatch" style="background-color: #F5F5F5; color: #333333;">
+                    Background
+                </div>
+                <div class="color-info">
+                    <h3>Background Color</h3>
+                    <p>Light gray for main background areas</p>
+                    <div class="color-code">#F5F5F5</div>
+                </div>
+            </div>
+
+            <div class="color-card">
+                <div class="color-swatch" style="background-color: #4A90E2;">
+                    Accent
+                </div>
+                <div class="color-info">
+                    <h3>Accent Color</h3>
+                    <p>Blue for call-to-action buttons and links</p>
+                    <div class="color-code">#4A90E2</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="components-section">
+            <h2 class="section-title">Mobile-First Components</h2>
+            <div class="component-grid">
+                <div class="component-demo">
+                    <h4>Buttons</h4>
+                    <button class="btn btn-primary">Primary Button</button>
+                    <button class="btn btn-secondary">Secondary Button</button>
+                    <button class="btn btn-outline">Outline Button</button>
+                </div>
+
+                <div class="component-demo">
+                    <h4>Form Elements</h4>
+                    <div class="form-group">
+                        <label class="form-label">Client Name</label>
+                        <input type="text" class="form-input" placeholder="Enter client name">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Project Type</label>
+                        <select class="form-input">
+                            <option>Kitchen Remodel</option>
+                            <option>Bathroom Remodel</option>
+                            <option>Countertops Only</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="component-demo">
+                    <h4>Status Indicators</h4>
+                    <div style="margin-bottom: 10px;">
+                        <span class="status status-active">Active</span>
+                        <span class="status status-pending">Pending</span>
+                        <span class="status status-inactive">Inactive</span>
+                    </div>
+                </div>
+
+                <div class="component-demo">
+                    <h4>Cards</h4>
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>Project Update</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>Kitchen countertop installation completed successfully. Client feedback: Excellent quality and professional service.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="components-section">
+            <h2 class="section-title">Usage Guidelines</h2>
+            <div class="usage-grid">
+                <div class="usage-card">
+                    <h5>Primary Color (#333333)</h5>
+                    <p>Use for main headings, body text, and navigation items. Provides strong readability and professional appearance.</p>
+                </div>
+                <div class="usage-card">
+                    <h5>Secondary Color (#B89778)</h5>
+                    <p>Use for accents, borders, and secondary elements. Represents warmth and craftsmanship in stone work.</p>
+                </div>
+                <div class="usage-card">
+                    <h5>Background Color (#F5F5F5)</h5>
+                    <p>Use for main background areas, card backgrounds, and subtle separators. Creates clean, professional look.</p>
+                </div>
+                <div class="usage-card">
+                    <h5>Accent Color (#4A90E2)</h5>
+                    <p>Use for call-to-action buttons, links, and interactive elements. Draws attention and encourages action.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="components-section">
+            <h2 class="section-title">Mobile-First Features</h2>
+            <div class="usage-grid">
+                <div class="usage-card">
+                    <h5>Touch-Friendly Design</h5>
+                    <p>Minimum 44px touch targets ensure easy interaction on mobile devices.</p>
+                </div>
+                <div class="usage-card">
+                    <h5>Responsive Typography</h5>
+                    <p>Text sizes scale appropriately across devices for optimal readability.</p>
+                </div>
+                <div class="usage-card">
+                    <h5>Flexible Grid System</h5>
+                    <p>Components adapt to different screen sizes using CSS Grid and Flexbox.</p>
+                </div>
+                <div class="usage-card">
+                    <h5>Performance Optimized</h5>
+                    <p>Lightweight CSS and optimized images ensure fast loading on mobile networks.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation Demo -->
+    <div class="mobile-nav-demo">
+        <a href="#" class="nav-item active">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+            <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M16 4c0-1.11.89-2 2-2s2 .89 2 2-.89 2-2 2-2-.89-2-2zm4 18v-6h2.5l-2.54-7.63A1.5 1.5 0 0 0 18.54 8h-4.08A1.5 1.5 0 0 0 13.04 8.37L10.5 16H13v6h7z"/>
+            </svg>
+            <span>Clients</span>
+        </a>
+        <a href="#" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1z"/>
+            </svg>
+            <span>Projects</span>
+        </a>
+        <a href="#" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/>
+            </svg>
+            <span>Calendar</span>
+        </a>
+        <a href="#" class="nav-item">
+            <svg class="nav-icon" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+            </svg>
+            <span>More</span>
+        </a>
+    </div>
+
+    <div class="footer">
+        <h3>Ready to Get Started?</h3>
+        <p>This mobile-first design system is optimized for stone & granite CRM applications.</p>
+        <p>Built with accessibility, performance, and user experience in mind.</p>
+    </div>
+</body>
+</html>

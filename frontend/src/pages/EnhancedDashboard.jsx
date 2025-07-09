@@ -27,6 +27,7 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  useTheme,
 } from '@mui/material';
 import {
   Description,
@@ -59,6 +60,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
 const EnhancedDashboard = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const [timeFrame, setTimeFrame] = useState('30d');
   const [currentTab, setCurrentTab] = useState(0);
@@ -424,7 +426,7 @@ const EnhancedDashboard = () => {
       {/* Header */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Box>
-          <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold', mb: 1, color: '#8B4513' }}>
+          <Typography variant="h4" component="h1" sx={{ fontWeight: 'bold', mb: 1, color: theme.palette.primary.main }}>
             🏗️ SG CRM Dashboard
           </Typography>
           <Typography variant="body1" color="text.secondary">
