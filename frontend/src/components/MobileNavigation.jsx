@@ -88,11 +88,10 @@ const MobileNavigation = () => {
       <AppBar 
         position="fixed" 
         sx={{ 
-          backgroundColor: theme.palette.background.paper,
-          color: theme.palette.text.primary,
-          boxShadow: `0 2px 8px ${theme.palette.primary.main}20`,
+          background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+          color: 'white',
+          boxShadow: `0 2px 8px rgba(0,0,0,0.15)`,
           zIndex: theme.zIndex.appBar,
-          backdropFilter: 'blur(8px)',
         }}
       >
         <Toolbar 
@@ -111,7 +110,7 @@ const MobileNavigation = () => {
               mr: 2,
               p: { xs: 1, sm: 1.5 },
               '&:hover': {
-                backgroundColor: theme.palette.primary.main + '10',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
               }
             }}
           >
@@ -124,12 +123,13 @@ const MobileNavigation = () => {
             sx={{
               flexGrow: 1,
               fontWeight: 700,
-              color: theme.palette.primary.main,
+              color: 'white',
               fontSize: '1.125rem',
               letterSpacing: '0.02em',
+              textShadow: '0 1px 2px rgba(0,0,0,0.2)',
             }}
           >
-            SG CRM
+            Surprise Granite CRM
           </Typography>
           
           <Box display="flex" alignItems="center" gap={1}>

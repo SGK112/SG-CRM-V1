@@ -33,7 +33,7 @@ print_step() {
 }
 
 # Check if running in correct directory
-if [ ! -f "package.json" ] || [ ! -d "backend" ] || [ ! -d "frontend" ]; then
+if [ ! -d "backend" ] || [ ! -d "frontend" ]; then
     print_error "Please run this script from the root directory of SG-CRM-V1"
     exit 1
 fi

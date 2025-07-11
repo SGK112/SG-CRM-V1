@@ -39,10 +39,9 @@ const Navbar = () => {
       position="fixed" 
       sx={{ 
         zIndex: (theme) => theme.zIndex.drawer + 1,
-        background: 'white',
-        color: '#333',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        borderBottom: '1px solid #e0e0e0',
+        background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+        color: 'white',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
         left: { xs: 0, md: 240 }, // Account for sidebar on desktop
         width: { xs: '100%', md: 'calc(100% - 240px)' },
       }}
@@ -60,7 +59,7 @@ const Navbar = () => {
             aria-haspopup="true"
             onClick={handleMenu}
             sx={{ 
-              color: '#666',
+              color: 'white',
               p: { xs: 1, sm: 1.5 }
             }}
           >
@@ -68,10 +67,11 @@ const Navbar = () => {
               sx={{ 
                 width: { xs: 28, sm: 32 }, 
                 height: { xs: 28, sm: 32 }, 
-                bgcolor: '#f5f5f5',
-                color: '#666',
-                border: '1px solid #e0e0e0',
-                fontSize: { xs: '0.875rem', sm: '1rem' }
+                bgcolor: 'rgba(255, 255, 255, 0.2)',
+                color: 'white',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                fontSize: { xs: '0.875rem', sm: '1rem' },
+                fontWeight: 'bold'
               }}
             >
               {(user?.full_name || user?.username)?.charAt(0).toUpperCase()}

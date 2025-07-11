@@ -2,15 +2,15 @@ import { createTheme } from '@mui/material/styles';
 
 // Brand Colors
 const brandColors = {
-  primary: '#333333',      // Dark Gray - Primary text and headers
-  secondary: '#B89778',    // Warm Brown/Tan - Accent color
+  primary: '#1976D2',      // Professional Blue - Primary brand color
+  secondary: '#DC2626',    // Red - Secondary brand color (changed from brown)
   background: '#F5F5F5',   // Light Gray - Background
-  accent: '#4A90E2',       // Blue - Call-to-action buttons
+  accent: '#0D47A1',       // Darker Blue - Call-to-action buttons
   white: '#FFFFFF',
   text: {
-    primary: '#333333',
-    secondary: '#666666',
-    light: '#999999'
+    primary: '#333333',    // Black text for content (changed from white)
+    secondary: '#333333',  // Dark text for content
+    light: '#666666'      // Light text for secondary content
   }
 };
 
@@ -34,9 +34,9 @@ const theme = createTheme({
       contrastText: brandColors.white,
     },
     secondary: {
-      main: brandColors.secondary,
-      light: '#d4bc9e',
-      dark: '#8a6b4f',
+      main: '#DC2626',     // Red color (changed from blue)
+      light: '#FEE2E2',    // Light red
+      dark: '#B91C1C',     // Dark red
       contrastText: brandColors.white,
     },
     background: {
@@ -44,9 +44,9 @@ const theme = createTheme({
       paper: brandColors.white,
     },
     text: {
-      primary: brandColors.text.primary,
-      secondary: brandColors.text.secondary,
-      disabled: brandColors.text.light,
+      primary: '#333333',          // Black text (changed from white)
+      secondary: '#666666',        // Dark gray text
+      disabled: '#999999',         // Light gray for disabled text
     },
     action: {
       selected: '#e8f4fd',
@@ -214,9 +214,9 @@ const theme = createTheme({
           },
         },
         containedSecondary: {
-          background: `linear-gradient(135deg, ${brandColors.secondary} 0%, #A08569 100%)`,
+          background: `linear-gradient(135deg, #DC2626 0%, #B91C1C 100%)`, // Updated to red
           '&:hover': {
-            background: `linear-gradient(135deg, #A08569 0%, ${brandColors.secondary} 100%)`,
+            background: `linear-gradient(135deg, #B91C1C 0%, #DC2626 100%)`, // Updated to red
           },
         },
       },
@@ -242,6 +242,7 @@ const theme = createTheme({
             borderRadius: 8,
             fontSize: '0.875rem',
             minHeight: 44, // Touch-friendly
+            color: '#333333', // Ensure input text is black
             '@media (min-width:600px)': {
               fontSize: '1rem',
               minHeight: 48,
@@ -250,11 +251,29 @@ const theme = createTheme({
               borderColor: '#d0d0d0',
             },
             '&:hover fieldset': {
-              borderColor: brandColors.secondary,
+              borderColor: '#DC2626', // Updated to red
             },
             '&.Mui-focused fieldset': {
               borderColor: brandColors.accent,
             },
+            '& input': {
+              color: '#333333', // Ensure input text is black
+            },
+            '& textarea': {
+              color: '#333333', // Ensure textarea text is black
+            },
+            '& input::placeholder': {
+              color: '#999999', // Gray placeholder text
+            },
+            '& textarea::placeholder': {
+              color: '#999999', // Gray placeholder text
+            },
+          },
+          '& .MuiInputLabel-root': {
+            color: '#666666', // Label color
+          },
+          '& .MuiInputLabel-root.Mui-focused': {
+            color: brandColors.accent, // Focused label color
           },
         },
       },

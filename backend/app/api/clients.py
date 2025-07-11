@@ -103,13 +103,14 @@ async def get_client(
     current_user: User = Depends(get_current_active_user)
 ):
     """Get a specific client by ID"""
-    if not ObjectId.is_valid(client_id):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid client ID"
-        )
+    # For mock/demo database, allow string IDs
+    if ObjectId.is_valid(client_id):
+        query = {"_id": ObjectId(client_id)}
+    else:
+        # For mock database with string IDs
+        query = {"_id": client_id}
     
-    client = await db.clients.find_one({"_id": ObjectId(client_id)})
+    client = await db.clients.find_one(query)
     if not client:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,

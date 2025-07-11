@@ -9,7 +9,7 @@ import logging
 import os
 from pathlib import Path
 
-from .api import auth, vendors, estimates, contracts, payments, pdf_upload, clients, contractors, appointments, services, marketing, settings, lead_capture, workflow
+from .api import auth, vendors, estimates, contracts, payments, pdf_upload, clients, contractors, appointments, services, marketing, settings, lead_capture, workflow, ai_assistant
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -49,9 +49,14 @@ async def http_exception_handler(request: Request, exc: HTTPException):
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins for development
+    allow_origins=[
+        "*",  # Allow all origins for development
+        "https://reimagined-space-spoon-wr7xgxp77jjqh57rj-3000.app.github.dev",
+        "http://localhost:3000",
+        "http://127.0.0.1:3000"
+    ],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],
     expose_headers=["*"],
 )
@@ -79,6 +84,7 @@ if static_dir.exists():
     app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
 # Include routers
+app.include_router(ai_assistant.router, prefix="/api/ai", tags=["AI Assistant"])
 app.include_router(lead_capture.router, prefix="/api/leads", tags=["Lead Capture"])
 app.include_router(workflow.router, prefix="/api/workflow", tags=["Workflow Automation"])
 app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])

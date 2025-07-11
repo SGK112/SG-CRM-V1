@@ -74,6 +74,34 @@ const Login = () => {
           alignItems: 'center',
         }}
       >
+        <Typography 
+          component="h1" 
+          variant="h4" 
+          gutterBottom
+          sx={{ 
+            color: 'white',
+            fontWeight: 'bold',
+            textAlign: 'center',
+            textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+          }}
+        >
+          Client Management
+        </Typography>
+        
+        <Typography 
+          component="h2" 
+          variant="h6" 
+          sx={{ 
+            mb: 3,
+            color: 'white',
+            textAlign: 'center',
+            opacity: 0.9,
+            textShadow: '0 1px 2px rgba(0,0,0,0.2)'
+          }}
+        >
+          Surprise Granite & Cabinetry CRM System
+        </Typography>
+        
         <Paper
           elevation={3}
           sx={{
@@ -82,13 +110,13 @@ const Login = () => {
             flexDirection: 'column',
             alignItems: 'center',
             width: '100%',
+            maxWidth: 400,
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(10px)',
+            borderRadius: 3,
           }}
         >
-          <Typography component="h1" variant="h4" gutterBottom>
-            CRM & Estimating
-          </Typography>
-          
-          <Typography component="h2" variant="h5" sx={{ mb: 3 }}>
+          <Typography component="h3" variant="h5" sx={{ mb: 3, color: 'primary.main' }}>
             {isRegistering ? 'Create Account' : 'Sign In'}
           </Typography>
 

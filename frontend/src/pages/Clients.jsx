@@ -20,11 +20,6 @@ import {
   LinearProgress,
   InputAdornment,
   Fab,
-  Drawer,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -32,12 +27,15 @@ import {
   Tabs,
   Tab,
   Alert,
-  Snackbar,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  useTheme,
 } from '@mui/material';
 import {
   Add as AddIcon,
   MoreVert as MoreIcon,
-  Person as PersonIcon,
   Phone as PhoneIcon,
   Email as EmailIcon,
   LocationOn as LocationIcon,
@@ -70,6 +68,7 @@ import ClientDialog from '../components/ClientDialog';
 
 const ClientCard = ({ client, onEdit, onView, onDelete, onSchedule, onUploadFiles, onCreateEstimate, onCreateContract }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const theme = useTheme();
 
   const handleMenuClick = (event) => {
     event.stopPropagation();
@@ -95,8 +94,8 @@ const ClientCard = ({ client, onEdit, onView, onDelete, onSchedule, onUploadFile
   };
 
   const getClientPriority = (client) => {
-    if (client.budget > 50000) return { label: 'VIP', color: '#D4A574', icon: <StarIcon /> };
-    if (client.budget > 25000) return { label: 'Premium', color: '#8B4513', icon: <TrendingUpIcon /> };
+    if (client.budget > 50000) return { label: 'VIP', color: theme.palette.primary.main, icon: <StarIcon /> };
+    if (client.budget > 25000) return { label: 'Premium', color: theme.palette.secondary.main, icon: <TrendingUpIcon /> };
     return { label: 'Standard', color: '#666', icon: <BusinessIcon /> };
   };
 
@@ -116,10 +115,10 @@ const ClientCard = ({ client, onEdit, onView, onDelete, onSchedule, onUploadFile
         border: '2px solid',
         borderColor: 'divider',
         background: 'linear-gradient(145deg, #ffffff 0%, #f8fafc 100%)',
-        boxShadow: '0 4px 20px rgba(139, 69, 19, 0.08)',
+        boxShadow: '0 4px 20px rgba(25, 118, 210, 0.08)',
         '&:hover': {
           transform: 'translateY(-8px) scale(1.02)',
-          boxShadow: '0 20px 40px rgba(139, 69, 19, 0.15)',
+          boxShadow: '0 20px 40px rgba(25, 118, 210, 0.15)',
           borderColor: priority.color,
         },
       }}
@@ -154,7 +153,7 @@ const ClientCard = ({ client, onEdit, onView, onDelete, onSchedule, onUploadFile
             height: 56,
             fontSize: '1.5rem',
             fontWeight: 700,
-            boxShadow: '0 4px 12px rgba(139, 69, 19, 0.3)',
+            boxShadow: '0 4px 12px rgba(25, 118, 210, 0.3)',
             border: '3px solid white'
           }}>
             {client.first_name?.charAt(0)}{client.last_name?.charAt(0)}
@@ -163,9 +162,9 @@ const ClientCard = ({ client, onEdit, onView, onDelete, onSchedule, onUploadFile
             onClick={handleMenuClick}
             sx={{ 
               p: 1,
-              backgroundColor: 'rgba(139, 69, 19, 0.1)',
+              backgroundColor: 'rgba(25, 118, 210, 0.1)',
               '&:hover': { 
-                backgroundColor: 'rgba(139, 69, 19, 0.2)',
+                backgroundColor: 'rgba(25, 118, 210, 0.2)',
                 transform: 'rotate(90deg)'
               },
               transition: 'all 0.3s ease'
@@ -376,6 +375,7 @@ const ClientCard = ({ client, onEdit, onView, onDelete, onSchedule, onUploadFile
 };
 
 const Clients = () => {
+  const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -478,9 +478,7 @@ const Clients = () => {
   };
 
   const handleViewClient = (client) => {
-    setSelectedClient(client);
-    setIsViewMode(true);
-    setDialogOpen(true);
+    navigate(`/clients/${client.id}`);
   };
 
   const handleUploadFiles = (client) => {
@@ -562,17 +560,16 @@ const Clients = () => {
         <Box sx={{ width: '100%', maxWidth: 400 }}>
           <LinearProgress 
             variant="indeterminate" 
-            sx={{ 
-              height: 6, 
-              borderRadius: 3,
-              backgroundColor: 'rgba(139, 69, 19, 0.1)',
-              '& .MuiLinearProgress-bar': {
-                backgroundColor: '#8B4513'
-              }
+            sx={{        height: 6, 
+        borderRadius: 3,
+        backgroundColor: 'rgba(25, 118, 210, 0.1)',
+        '& .MuiLinearProgress-bar': {
+          backgroundColor: theme.palette.primary.main
+        }
             }} 
           />
         </Box>
-        <Typography variant="h6" sx={{ color: '#8B4513', fontWeight: 600 }}>
+        <Typography variant="h6" sx={{ color: theme.palette.primary.main, fontWeight: 600 }}>
           Loading Clients...
         </Typography>
       </Box>
@@ -581,17 +578,16 @@ const Clients = () => {
 
   return (
     <Box sx={{ 
+      p: 3,
       maxWidth: '1600px', 
       mx: 'auto', 
-      width: '100%',
-      px: { xs: 2, sm: 3, md: 4 },
-      pb: { xs: 3, sm: 4 }
+      width: '100%'
     }}>
       {/* Professional Header */}
       <Paper sx={{ 
         mb: 4,
         borderRadius: 4,
-        background: 'linear-gradient(135deg, #8B4513 0%, #D4A574 100%)',
+        background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
         color: 'white',
         overflow: 'hidden',
         position: 'relative'
@@ -613,14 +609,16 @@ const Clients = () => {
                 fontWeight: 800,
                 fontSize: { xs: '2rem', sm: '2.5rem', md: '3rem' },
                 mb: 1,
-                textShadow: '0 2px 4px rgba(0,0,0,0.3)'
+                textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                color: 'white'
               }}>
                 Client Management
               </Typography>
               <Typography variant="h6" sx={{ 
                 opacity: 0.9,
                 fontSize: { xs: '1rem', sm: '1.25rem' },
-                fontWeight: 400
+                fontWeight: 400,
+                color: 'white'
               }}>
                 Surprise Granite & Cabinetry CRM System
               </Typography>
@@ -732,11 +730,12 @@ const Clients = () => {
       <Paper sx={{ 
         p: 3, 
         mb: 3, 
-        borderRadius: 4,
-        boxShadow: '0 4px 20px rgba(139, 69, 19, 0.08)',
-        border: '1px solid rgba(139, 69, 19, 0.1)'
+        borderRadius: 3,
+        boxShadow: 'none',
+        border: '1px solid',
+        borderColor: 'divider'
       }}>
-        <Typography variant="h6" sx={{ mb: 2, color: '#8B4513', fontWeight: 600 }}>
+        <Typography variant="h6" sx={{ mb: 2, color: theme.palette.primary.main, fontWeight: 600 }}>
           Quick Actions
         </Typography>
         <Grid container spacing={2}>
@@ -748,11 +747,11 @@ const Clients = () => {
               onClick={handleAddClient}
               sx={{
                 py: 1.5,
-                borderColor: '#8B4513',
-                color: '#8B4513',
+                borderColor: theme.palette.primary.main,
+                color: theme.palette.primary.main,
                 '&:hover': {
-                  borderColor: '#D4A574',
-                  backgroundColor: 'rgba(139, 69, 19, 0.1)'
+                  borderColor: theme.palette.primary.dark,
+                  backgroundColor: 'rgba(25, 118, 210, 0.1)'
                 }
               }}
             >
@@ -821,11 +820,12 @@ const Clients = () => {
 
       {/* Advanced Search and Filters */}
       <Paper sx={{ 
-        p: { xs: 3, sm: 4 }, 
-        mb: 4,
-        borderRadius: 4,
-        boxShadow: '0 4px 20px rgba(139, 69, 19, 0.08)',
-        border: '1px solid rgba(139, 69, 19, 0.1)'
+        p: 3, 
+        mb: 3,
+        borderRadius: 3,
+        boxShadow: 'none',
+        border: '1px solid',
+        borderColor: 'divider'
       }}>
         <Grid container spacing={3} alignItems="center">
           <Grid item xs={12} md={5}>
@@ -837,7 +837,7 @@ const Clients = () => {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon sx={{ color: '#8B4513' }} />
+                    <SearchIcon sx={{ color: theme.palette.primary.main }} />
                   </InputAdornment>
                 ),
               }}
@@ -845,10 +845,10 @@ const Clients = () => {
                 '& .MuiOutlinedInput-root': {
                   borderRadius: 3,
                   '&:hover fieldset': {
-                    borderColor: '#8B4513',
+                    borderColor: theme.palette.primary.main,
                   },
                   '&.Mui-focused fieldset': {
-                    borderColor: '#8B4513',
+                    borderColor: theme.palette.primary.main,
                   },
                 }
               }}
@@ -900,9 +900,9 @@ const Clients = () => {
                 <IconButton 
                   onClick={() => setShowFilters(!showFilters)}
                   sx={{ 
-                    backgroundColor: showFilters ? '#8B4513' : 'transparent',
-                    color: showFilters ? 'white' : '#8B4513',
-                    '&:hover': { backgroundColor: '#8B4513', color: 'white' }
+                    backgroundColor: showFilters ? theme.palette.primary.main : 'transparent',
+                    color: showFilters ? 'white' : theme.palette.primary.main,
+                    '&:hover': { backgroundColor: theme.palette.primary.main, color: 'white' }
                   }}
                 >
                   <FilterIcon />
@@ -923,7 +923,7 @@ const Clients = () => {
         {/* Advanced Filters Collapse */}
         {showFilters && (
           <Box sx={{ mt: 3, pt: 3, borderTop: '1px solid rgba(139, 69, 19, 0.1)' }}>
-            <Typography variant="h6" sx={{ mb: 2, color: '#8B4513', fontWeight: 600 }}>
+            <Typography variant="h6" sx={{ mb: 2, color: theme.palette.primary.main, fontWeight: 600 }}>
               Advanced Filters
             </Typography>
             <Grid container spacing={2}>
@@ -1006,13 +1006,13 @@ const Clients = () => {
           p: { xs: 4, sm: 6 }, 
           textAlign: 'center',
           borderRadius: 4,
-          boxShadow: '0 4px 20px rgba(139, 69, 19, 0.08)',
-          border: '2px dashed rgba(139, 69, 19, 0.2)',
-          backgroundColor: 'rgba(139, 69, 19, 0.02)'
+          boxShadow: '0 4px 20px rgba(25, 118, 210, 0.08)',
+          border: `2px dashed ${theme.palette.primary.light}`,
+          backgroundColor: 'rgba(25, 118, 210, 0.02)'
         }}>
           <BusinessIcon sx={{ 
             fontSize: { xs: 80, sm: 100 }, 
-            color: '#8B4513', 
+            color: theme.palette.primary.main, 
             mb: 3,
             opacity: 0.7
           }} />
@@ -1020,7 +1020,7 @@ const Clients = () => {
             mb: 2,
             fontSize: { xs: '1.5rem', sm: '2rem' },
             fontWeight: 700,
-            color: '#8B4513'
+            color: theme.palette.primary.main
           }}>
             No Clients Found
           </Typography>
@@ -1047,9 +1047,9 @@ const Clients = () => {
               textTransform: 'none',
               fontSize: '1.1rem',
               fontWeight: 600,
-              backgroundColor: '#8B4513',
+              backgroundColor: theme.palette.primary.main,
               '&:hover': {
-                backgroundColor: '#D4A574',
+                backgroundColor: theme.palette.primary.dark,
                 transform: 'translateY(-2px)'
               }
             }}
@@ -1068,9 +1068,9 @@ const Clients = () => {
           position: 'fixed',
           bottom: 24,
           right: 24,
-          backgroundColor: '#8B4513',
+          backgroundColor: theme.palette.primary.main,
           '&:hover': {
-            backgroundColor: '#D4A574',
+            backgroundColor: theme.palette.primary.dark,
             transform: 'scale(1.1)'
           },
           transition: 'all 0.3s ease'
@@ -1109,6 +1109,7 @@ const Clients = () => {
 
 // File Upload Dialog Component
 const FileUploadDialog = ({ open, onClose, client, onUploadProgress }) => {
+  const theme = useTheme();
   const [dragActive, setDragActive] = useState(false);
   const [files, setFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
@@ -1197,7 +1198,7 @@ const FileUploadDialog = ({ open, onClose, client, onUploadProgress }) => {
     >
       <DialogTitle sx={{ 
         pb: 0,
-        background: 'linear-gradient(135deg, #8B4513 0%, #D4A574 100%)',
+        background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
         color: 'white'
       }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -1233,7 +1234,7 @@ const FileUploadDialog = ({ open, onClose, client, onUploadProgress }) => {
               {/* Drag & Drop Upload Area */}
               <Paper
                 sx={{
-                  border: `3px dashed ${dragActive ? '#8B4513' : '#ccc'}`,
+                  border: `3px dashed ${dragActive ? theme.palette.primary.main : '#ccc'}`,
                   borderRadius: 3,
                   p: 4,
                   textAlign: 'center',
@@ -1241,8 +1242,8 @@ const FileUploadDialog = ({ open, onClose, client, onUploadProgress }) => {
                   cursor: 'pointer',
                   transition: 'all 0.3s ease',
                   '&:hover': {
-                    borderColor: '#8B4513',
-                    backgroundColor: 'rgba(139, 69, 19, 0.02)'
+                    borderColor: theme.palette.primary.main,
+                    backgroundColor: 'rgba(25, 118, 210, 0.02)'
                   }
                 }}
                 onDragEnter={handleDrag}
@@ -1253,10 +1254,10 @@ const FileUploadDialog = ({ open, onClose, client, onUploadProgress }) => {
               >
                 <CloudUploadIcon sx={{ 
                   fontSize: 64, 
-                  color: dragActive ? '#8B4513' : '#ccc',
+                  color: dragActive ? theme.palette.primary.main : '#ccc',
                   mb: 2 
                 }} />
-                <Typography variant="h6" sx={{ mb: 1, color: '#8B4513', fontWeight: 600 }}>
+                <Typography variant="h6" sx={{ mb: 1, color: theme.palette.primary.main, fontWeight: 600 }}>
                   Drop files here or click to browse
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
@@ -1275,7 +1276,7 @@ const FileUploadDialog = ({ open, onClose, client, onUploadProgress }) => {
               {/* File List */}
               {files.length > 0 && (
                 <Box sx={{ mt: 3 }}>
-                  <Typography variant="h6" sx={{ mb: 2, color: '#8B4513' }}>
+                  <Typography variant="h6" sx={{ mb: 2, color: theme.palette.primary.main }}>
                     Files to Upload ({files.length})
                   </Typography>
                   <List>
@@ -1322,8 +1323,8 @@ const FileUploadDialog = ({ open, onClose, client, onUploadProgress }) => {
 
           {activeTab === 1 && (
             <Box sx={{ textAlign: 'center', py: 4 }}>
-              <PdfIcon sx={{ fontSize: 64, color: '#8B4513', mb: 2 }} />
-              <Typography variant="h6" sx={{ mb: 1, color: '#8B4513' }}>
+              <PdfIcon sx={{ fontSize: 64, color: theme.palette.primary.main, mb: 2 }} />
+              <Typography variant="h6" sx={{ mb: 1, color: theme.palette.primary.main }}>
                 PDF Price List Parser
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
@@ -1337,8 +1338,8 @@ const FileUploadDialog = ({ open, onClose, client, onUploadProgress }) => {
 
           {activeTab === 2 && (
             <Box sx={{ textAlign: 'center', py: 4 }}>
-              <ImageIcon sx={{ fontSize: 64, color: '#8B4513', mb: 2 }} />
-              <Typography variant="h6" sx={{ mb: 1, color: '#8B4513' }}>
+              <ImageIcon sx={{ fontSize: 64, color: theme.palette.primary.main, mb: 2 }} />
+              <Typography variant="h6" sx={{ mb: 1, color: theme.palette.primary.main }}>
                 Project Images
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -1349,8 +1350,8 @@ const FileUploadDialog = ({ open, onClose, client, onUploadProgress }) => {
 
           {activeTab === 3 && (
             <Box sx={{ textAlign: 'center', py: 4 }}>
-              <DescriptionIcon sx={{ fontSize: 64, color: '#8B4513', mb: 2 }} />
-              <Typography variant="h6" sx={{ mb: 1, color: '#8B4513' }}>
+              <DescriptionIcon sx={{ fontSize: 64, color: theme.palette.primary.main, mb: 2 }} />
+              <Typography variant="h6" sx={{ mb: 1, color: theme.palette.primary.main }}>
                 Documents
               </Typography>
               <Typography variant="body2" color="text.secondary">
@@ -1371,8 +1372,8 @@ const FileUploadDialog = ({ open, onClose, client, onUploadProgress }) => {
           disabled={!files.length || uploading}
           startIcon={uploading ? null : <UploadIcon />}
           sx={{
-            backgroundColor: '#8B4513',
-            '&:hover': { backgroundColor: '#D4A574' }
+            backgroundColor: theme.palette.primary.main,
+            '&:hover': { backgroundColor: theme.palette.primary.dark }
           }}
         >
           {uploading ? 'Uploading...' : `Upload ${files.length} Files`}

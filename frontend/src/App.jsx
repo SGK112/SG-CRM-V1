@@ -10,6 +10,8 @@ import MobileNavigation from './components/MobileNavigation';
 import Login from './pages/Login';
 import EnhancedDashboard from './pages/EnhancedDashboard';
 import SimpleClients from './pages/SimpleClients';
+import Clients from './pages/Clients';
+import ClientDetail from './pages/ClientDetail';
 import Contractors from './pages/Contractors';
 import Calendar from './pages/Calendar';
 import Services from './pages/Services';
@@ -21,7 +23,7 @@ import MarketingDashboard from './pages/MarketingDashboard';
 import EnhancedSettings from './pages/Admin/EnhancedSettings';
 import Inbox from './pages/Inbox';
 import Forms from './pages/Forms';
-import AIAssistant from './components/AIAssistant';
+import AIAssistant from './components/AIAssistantSimple';
 import { Toaster } from 'react-hot-toast';
 
 const ProtectedRoute = ({ children }) => {
@@ -194,7 +196,15 @@ function AuthenticatedApp() {
               path="/clients" 
               element={
                 <ProtectedRoute>
-                  <SimpleClients />
+                  <Clients />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/clients/:id" 
+              element={
+                <ProtectedRoute>
+                  <ClientDetail />
                 </ProtectedRoute>
               } 
             />
